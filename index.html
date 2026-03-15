@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lillian Wang — Math @ Princeton</title>
+<meta name="description" content="Lillian Wang — Math @ Princeton '29. Building tools I wish existed. ZERO Lab. Applied math PhD track."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --o:#D4500A;--o2:#e8631d;--o3:#f2894e;
+  --odim:rgba(212,80,10,.07);--olin:rgba(212,80,10,.18);--oglow:rgba(212,80,10,.14);
+  --ink:#0f0d0b;--i2:#2a2420;--i3:#5c524c;--i4:#9a9090;--i5:#ccc5bf;
+  --bg:#f7f3ee;--bg2:#f0e9e0;--bg3:#e5dbd0;--bg4:#d6ccc0;
+  --bdr:rgba(15,13,11,.07);--bdr2:rgba(15,13,11,.12);
+  --display:'Playfair Display',Georgia,serif;
+  --sans:'Instrument Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --spring:cubic-bezier(.22,1,.36,1);
+  --snap:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--o),var(--o3));z-index:9999;transition:width .05s linear;box-shadow:0 0 8px var(--oglow)}
+#grain{position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.32;mix-blend-mode:multiply}
+#cursor-glow{position:fixed;width:400px;height:400px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(212,80,10,.05) 0%,transparent 70%);transform:translate(-50%,-50%)}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 52px;position:relative;z-index:2}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;transition:background .4s,box-shadow .4s}
+nav.scrolled{background:rgba(247,243,238,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr)}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 52px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nav-logo-mark{width:30px;height:30px;border-radius:5px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-style:italic;font-weight:700;color:var(--bg);font-size:.9rem;transition:transform .22s var(--snap),background .22s}
+.nav-logo:hover .nav-logo-mark{transform:rotate(-8deg) scale(1.1);background:var(--o)}
+.nav-logo-name{font-family:var(--display);font-style:italic;font-size:.98rem;color:var(--ink);font-weight:400}
+.nav-logo-name b{font-style:normal;color:var(--o);font-weight:700}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{font-size:.72rem;font-weight:500;color:var(--i3);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:4px;transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--ink);background:var(--bg2)}
+.nav-cta{font-family:var(--mono);font-size:.7rem;font-weight:500;padding:7px 14px;border-radius:4px;background:transparent;color:var(--i2);text-decoration:none;letter-spacing:.04em;border:1px solid var(--bdr2);transition:all .18s var(--spring);margin-left:6px}
+.nav-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);transform:translateY(-1px)}
+
+/* MARQUEE */
+.marquee-wrap{background:var(--ink);overflow:hidden;white-space:nowrap;padding:9px 0;position:relative;z-index:3;margin-top:60px}
+.marquee-track{display:inline-flex;animation:marquee 32s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-item{font-family:var(--mono);font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,243,238,.5);padding:0 28px;display:inline-flex;align-items:center;gap:12px;white-space:nowrap}
+.marquee-item .dot{color:var(--o);font-size:.5rem}
+.marquee-item.hl{color:rgba(247,243,238,.85);font-weight:500}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ═══════════════════════════
+   HERO — full-bleed split
+   ═══════════════════════════ */
+#hero{
+  /* sits right under the marquee; no min-height on section itself */
+  display:flex;flex-direction:column;
+  position:relative;
+  background:var(--bg);
+}
+
+/* grid lines background */
+.hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(var(--bdr) 1px,transparent 1px),linear-gradient(90deg,var(--bdr) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 90% 90% at 55% 45%,black 15%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 90% at 55% 45%,black 15%,transparent 70%);
+  opacity:.45;
+}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 55% 65% at 82% 22%,rgba(212,80,10,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 35% 45% at 8% 88%,rgba(212,80,10,.04) 0%,transparent 55%);
+}
+
+/* The actual split — full viewport width, flush edges */
+.hero-split{
+  display:flex;
+  flex:1;
+  min-height:calc(100vh - 98px); /* 60px nav + 38px marquee */
+  position:relative;z-index:2;
+}
+
+/* left half: constrained content, right-padded */
+.hero-l{
+  flex:1;
+  padding:72px max(52px,calc((100vw - 1160px)/2 + 52px)) 72px max(52px,calc((100vw - 1160px)/2 + 52px));
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--bdr);
+  /* right edge of left panel is just the border; right panel is 420px */
+  padding-right:64px;
+}
+/* Clamp left padding so content aligns with the wrap */
+@supports (padding-left: max(1px,1px)){
+  .hero-l{
+    padding-left:max(52px,calc((100vw - 1160px) / 2 + 52px));
+  }
+}
+
+/* right half: fixed 420px, flush to viewport edge on right */
+.hero-r{
+  width:420px;
+  flex-shrink:0;
+  display:flex;flex-direction:column;
+  background:var(--bg);
+  position:relative;
+}
+
+/* orange top bar on right panel */
+.hr-accent{height:3px;background:linear-gradient(90deg,var(--o),var(--o3),transparent);flex-shrink:0}
+
+/* 2x2 + wide bento */
+.stat-bento{
+  flex:1;display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr 80px;
+  border-left:1px solid var(--bdr);
+}
+.sb{
+  padding:24px 26px;
+  border-bottom:1px solid var(--bdr);
+  border-right:1px solid var(--bdr);
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;cursor:default;
+  transition:background .2s;
+}
+.sb:nth-child(2n){border-right:none}
+.sb.wide{grid-column:1/-1;border-right:none;border-bottom:none;flex-direction:row;align-items:center;gap:16px}
+/* last pair: 3rd row has no bottom border */
+.sb:nth-last-child(2):not(.wide),.sb:nth-last-child(1):not(.wide){border-bottom:none}
+
+.sb::before{content:'';position:absolute;inset:0;background:var(--odim);opacity:0;transition:opacity .25s}
+.sb:hover::before{opacity:1}
+
+.sb-n{
+  font-family:var(--display);
+  font-size:clamp(2rem,3.2vw,2.9rem);
+  font-weight:900;color:var(--o);
+  line-height:1;letter-spacing:-.05em;
+  position:relative;z-index:1;
+  transition:transform .3s var(--spring);
+}
+.sb-n sup{font-size:.4em;vertical-align:super;font-family:var(--sans);color:var(--i3)}
+.sb:hover .sb-n{transform:scale(1.08) translateY(-2px)}
+.sb-label{font-size:.76rem;color:var(--i2);font-weight:500;position:relative;z-index:1}
+.sb-sub{font-family:var(--mono);font-size:.57rem;color:var(--i4);margin-top:2px;letter-spacing:.03em;position:relative;z-index:1}
+.sb-glyph{font-family:var(--display);font-style:italic;font-size:3.5rem;font-weight:900;color:var(--o);opacity:.08;line-height:1;user-select:none;pointer-events:none}
+
+/* profile strip at bottom */
+.hr-profile{
+  border-left:1px solid var(--bdr);border-top:1px solid var(--bdr);
+  padding:16px 22px;display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.hr-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--o),var(--o3));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-style:italic;font-weight:700;color:#fff;font-size:1rem}
+.hr-profile-name{font-family:var(--display);font-size:.88rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.hr-profile-sub{font-family:var(--mono);font-size:.58rem;color:var(--i4);letter-spacing:.04em;margin-top:1px}
+.hr-profile-links{margin-left:auto;display:flex;gap:5px}
+.hr-pl{font-family:var(--mono);font-size:.62rem;color:var(--i3);text-decoration:none;padding:4px 9px;border-radius:3px;border:1px solid var(--bdr);transition:all .15s}
+.hr-pl:hover{color:var(--o);border-color:var(--olin);background:var(--odim)}
+
+/* hero left content */
+.badge-row{display:flex;align-items:center;gap:10px;margin-bottom:30px}
+.princeton-badge{display:inline-flex;align-items:center;gap:7px;background:var(--ink);border-radius:4px;padding:5px 11px}
+.princeton-shield{width:16px;height:16px;background:var(--o);border-radius:50% 50% 50% 0;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;color:#fff;font-family:var(--display)}
+.princeton-text{font-family:var(--mono);font-size:.64rem;color:rgba(247,243,238,.85);letter-spacing:.06em}
+.live-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.62rem;color:var(--i3);letter-spacing:.06em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:livePulse 2.5s ease-in-out infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 2px rgba(34,197,94,.2)}50%{box-shadow:0 0 0 5px rgba(34,197,94,.05)}}
+
+.hero-name{font-family:var(--display);font-size:clamp(3.6rem,5.8vw,5.8rem);font-weight:900;line-height:.95;letter-spacing:-.04em;color:var(--ink);margin-bottom:10px}
+.hero-name .line1{display:block;font-weight:400;font-style:italic;color:var(--i3);font-size:.48em;letter-spacing:-.01em;margin-bottom:8px;line-height:1}
+.hero-name em{font-style:italic;color:var(--o);display:block;position:relative}
+.hero-name em::after{content:'';position:absolute;bottom:-5px;left:0;height:2px;width:100%;background:linear-gradient(90deg,var(--o),transparent);border-radius:1px;transform:scaleX(0);transform-origin:left;animation:nameUnderline 1.1s .9s var(--spring) forwards}
+@keyframes nameUnderline{to{transform:scaleX(1)}}
+
+.hero-kicker{font-family:var(--mono);font-size:.79rem;color:var(--o);letter-spacing:.04em;margin:22px 0 26px;display:flex;align-items:center;gap:8px;min-height:1.4em}
+.kicker-prompt{color:var(--i4);user-select:none}
+.cursor-blink{display:inline-block;width:1px;height:.9em;background:var(--o);margin-left:2px;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.hero-bio{font-size:.97rem;line-height:1.84;color:var(--i2);max-width:500px;margin-bottom:28px}
+.hero-bio p+p{margin-top:11px}
+.hero-bio a{color:var(--o);text-underline-offset:3px;text-decoration-thickness:1px;text-decoration:underline}
+.hero-bio strong{color:var(--ink);font-weight:600}
+
+.hero-ctas{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:30px}
+.btn{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;font-weight:600;letter-spacing:.03em;padding:10px 18px;border-radius:4px;text-decoration:none;border:1.5px solid transparent;transition:all .2s var(--spring)}
+.btn-fill{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn-fill:hover{background:var(--o);border-color:var(--o);transform:translateY(-2px);box-shadow:0 8px 24px var(--oglow)}
+.btn-line{background:transparent;color:var(--i2);border-color:var(--bdr2)}
+.btn-line:hover{border-color:var(--i3);color:var(--ink);transform:translateY(-2px)}
+
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-family:var(--mono);font-size:.63rem;padding:3px 9px;border-radius:3px;letter-spacing:.03em;background:transparent;border:1px solid var(--bdr2);color:var(--i3);transition:all .16s var(--spring);cursor:default}
+.chip:hover{border-color:var(--olin);color:var(--o);background:var(--odim);transform:translateY(-1px)}
+.chip.lit{background:var(--odim);border-color:var(--olin);color:var(--o)}
+
+.hero-foot{padding:16px 0;border-top:1px solid var(--bdr);display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:.61rem;letter-spacing:.1em;color:var(--i5);text-transform:uppercase;position:relative;z-index:2}
+.hf-line{flex:1;height:1px;background:linear-gradient(90deg,var(--bdr),transparent)}
+.hf-arrow{width:24px;height:24px;border-radius:50%;border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--i4);animation:arrowBounce 2.2s ease-in-out infinite}
+@keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+/* SECTION BASE */
+.sec{padding:96px 0;position:relative;overflow:hidden}
+.sec+.sec{border-top:1px solid var(--bdr)}
+.sec-index{position:absolute;left:0;top:50%;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bg3);user-select:none;pointer-events:none;z-index:0}
+.eyebrow{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--o);margin-bottom:8px}
+h2{font-family:var(--display);font-size:clamp(2rem,3.5vw,2.9rem);font-weight:700;line-height:1.1;letter-spacing:-.03em;color:var(--ink);margin-bottom:10px}
+.sec-desc{font-size:.92rem;color:var(--i3);max-width:480px;line-height:1.7}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:52px}
+.pc{background:var(--bg);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;position:relative;transition:border-color .25s,box-shadow .25s,transform .3s var(--spring);display:flex;flex-direction:column;will-change:transform}
+.pc:hover{border-color:var(--olin);box-shadow:0 20px 56px rgba(212,80,10,.09),0 4px 12px rgba(0,0,0,.04);transform:translateY(-6px)}
+.pc.feat{grid-column:1/-1;display:grid;grid-template-columns:1fr 400px;grid-template-rows:1fr}
+.pc.feat:hover{transform:translateY(-6px)}
+.pc-img{position:relative;overflow:hidden;background:var(--bg2)}
+.pc.feat .pc-img{height:100%;min-height:280px}
+.pc:not(.feat) .pc-img{height:186px}
+.pc-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--spring),filter .4s;filter:saturate(.82) brightness(.98)}
+.pc:hover .pc-img img{transform:scale(1.05);filter:saturate(1) brightness(1)}
+.img-hanzi{object-position:30% center}
+.img-tiger{object-fit:contain;object-position:center;background:var(--bg2);padding:12px}
+.pc-img::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(212,80,10,.1) 0%,transparent 55%);pointer-events:none}
+.pc-icon-badge{position:absolute;bottom:12px;left:12px;z-index:2;width:44px;height:44px;border-radius:10px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.22);border:2px solid rgba(255,255,255,.92);transition:transform .3s var(--snap)}
+.pc-icon-badge img{width:100%;height:100%;object-fit:cover}
+.pc:hover .pc-icon-badge{transform:scale(1.1) rotate(-4deg)}
+.pc-img-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.pc-img-fallback.axiom-bg{background:linear-gradient(135deg,#0d0f14,#111420,#0a0d12)}
+.pc-img-fallback.hanzi-bg{background:linear-gradient(135deg,#0f1a0e,#0d1c0c,#0f1a12)}
+.pc-img-fallback.tiger-bg{background:linear-gradient(135deg,#1a1200,#1e1500,#14100a)}
+.pc-img-fallback.poke-bg{background:linear-gradient(135deg,#1a1a2e,#0f0f1e,#13121e)}
+.pc-img-fallback::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 65% 35%,var(--glow1,rgba(212,80,10,.18)) 0%,transparent 60%),radial-gradient(ellipse at 25% 75%,var(--glow2,rgba(59,130,246,.1)) 0%,transparent 50%)}
+.fallback-glyph{font-size:3.8rem;position:relative;z-index:1;filter:drop-shadow(0 0 24px var(--glyph-glow,rgba(212,80,10,.5)));animation:fallbackFloat 3.5s ease-in-out infinite}
+@keyframes fallbackFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+.fallback-label{position:absolute;bottom:12px;left:12px;z-index:2;font-family:var(--mono);font-size:.6rem;color:rgba(247,243,238,.4);letter-spacing:.08em}
+.pc-body{padding:26px 30px;display:flex;flex-direction:column;flex:1}
+.pc.feat .pc-body{padding:34px 38px}
+.pc-num{font-family:var(--mono);font-size:.6rem;color:var(--i5);letter-spacing:.12em;margin-bottom:12px}
+.pc-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pc-name{font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.pc.feat .pc-name{font-size:1.45rem}
+.pc-tag{font-family:var(--mono);font-size:.59rem;padding:2px 7px;border-radius:2px;background:var(--odim);color:var(--o);letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--olin)}
+.pc-desc{font-size:.88rem;color:var(--i2);line-height:1.72;flex:1;margin-bottom:14px}
+.pc-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px}
+.pp{font-family:var(--mono);font-size:.6rem;padding:2px 7px;border-radius:2px;background:var(--bg2);border:1px solid var(--bdr);color:var(--i3)}
+.pc-links{display:flex;gap:7px;margin-top:auto}
+.pl{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:500;padding:7px 13px;border-radius:4px;text-decoration:none;white-space:nowrap;border:1px solid var(--bdr);color:var(--i3);transition:all .18s var(--spring)}
+.pl:hover{color:var(--o);border-color:var(--olin);transform:translateY(-1px)}
+.pl.launch{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pl.launch:hover{background:var(--o);border-color:var(--o);box-shadow:0 4px 16px var(--oglow);transform:translateY(-2px)}
+
+/* TIMELINE */
+.timeline{margin-top:52px;position:relative}
+.timeline::before{content:'';position:absolute;left:168px;top:24px;bottom:24px;width:1px;background:linear-gradient(to bottom,transparent,var(--bdr2) 8%,var(--bdr2) 92%,transparent)}
+.tl-row{display:grid;grid-template-columns:140px 56px 1fr;gap:0;padding:32px 0;position:relative;align-items:start}
+.tl-row+.tl-row{border-top:1px solid var(--bdr)}
+.tl-year{font-family:var(--mono);font-size:.67rem;color:var(--i4);letter-spacing:.08em;padding-top:4px;text-align:right;padding-right:18px;white-space:nowrap}
+.tl-dot-col{display:flex;justify-content:center;padding-top:3px;position:relative;z-index:1}
+.tl-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--bg);background:var(--bg4);box-shadow:0 0 0 1px var(--bdr2);transition:background .25s var(--snap),transform .25s var(--snap),box-shadow .25s;flex-shrink:0}
+.tl-row:hover .tl-dot{background:var(--o);transform:scale(1.3);box-shadow:0 0 0 3px var(--oglow)}
+.tl-body{padding-left:24px}
+.tl-title{font-family:var(--display);font-size:1.08rem;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-bottom:3px;transition:color .2s}
+.tl-row:hover .tl-title{color:var(--o)}
+.tl-sub{font-family:var(--mono);font-size:.62rem;color:var(--o);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.tl-desc{font-size:.86rem;color:var(--i2);line-height:1.72;max-width:680px}
+.tl-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px}
+.tl-tag{font-family:var(--mono);font-size:.58rem;padding:2px 7px;border-radius:2px;background:var(--bg2);border:1px solid var(--bdr);color:var(--i3);transition:border-color .15s,color .15s}
+.tl-row:hover .tl-tag{border-color:var(--olin);color:var(--o2)}
+
+/* RESEARCH */
+.research-wrap{margin-top:52px;display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start}
+.research-main{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:48px 52px;position:relative;overflow:hidden}
+.research-main::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--o) 0%,var(--o3) 50%,transparent 100%)}
+.research-main::after{content:'"';position:absolute;right:28px;top:16px;font-family:var(--display);font-size:11rem;font-weight:900;font-style:italic;color:var(--o);opacity:.04;line-height:1;pointer-events:none}
+.rv{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.rv-chip{background:var(--o);color:#fff;padding:3px 9px;border-radius:2px;font-family:var(--mono);font-size:.6rem;letter-spacing:.09em;text-transform:uppercase}
+.rv-label{font-family:var(--mono);font-size:.66rem;color:var(--i3);letter-spacing:.05em}
+.rt{font-family:var(--display);font-size:1.42rem;font-weight:700;line-height:1.28;color:var(--ink);letter-spacing:-.02em;margin-bottom:20px}
+.rt em{font-weight:400;font-style:italic}
+.ra{font-size:.9rem;color:var(--i2);line-height:1.84;margin-bottom:20px}
+.hl{background:var(--odim);padding:1px 5px;border-radius:2px;color:var(--o);font-weight:500}
+.methods{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:22px}
+.mt{font-family:var(--mono);font-size:.61rem;padding:3px 9px;border-radius:2px;background:var(--bg);border:1px solid var(--bdr);color:var(--i2)}
+.finding{border-left:2px solid var(--o);padding:13px 18px;background:linear-gradient(90deg,var(--odim),transparent);border-radius:0 5px 5px 0}
+.finding p{font-size:.88rem;color:var(--i2);font-style:italic;line-height:1.74}
+.finding strong{color:var(--o);font-style:normal}
+.research-side{display:flex;flex-direction:column;gap:12px}
+.rs-card{background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:20px 22px;transition:border-color .2s,transform .2s var(--spring)}
+.rs-card:hover{border-color:var(--olin);transform:translateY(-2px)}
+.rs-label{font-family:var(--mono);font-size:.6rem;color:var(--o);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.rs-val{font-family:var(--display);font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2}
+.rs-desc{font-size:.78rem;color:var(--i3);margin-top:3px}
+
+/* NOW */
+.now-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:52px}
+.nc{padding:26px 24px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg);position:relative;overflow:hidden;transition:border-color .22s,transform .22s var(--spring),box-shadow .22s;cursor:default}
+.nc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--o),var(--o3));transform:scaleY(0);transform-origin:bottom;transition:transform .35s var(--spring)}
+.nc:hover{border-color:var(--olin);transform:translateY(-4px);box-shadow:0 12px 32px rgba(212,80,10,.07)}
+.nc:hover::before{transform:scaleY(1)}
+.nc.feat{border-color:var(--olin);background:linear-gradient(135deg,var(--odim) 0%,var(--bg) 60%)}
+.nc.feat::before{transform:scaleY(1)}
+.nc-ico{font-size:1.5rem;margin-bottom:12px;display:block}
+.nc-label{font-family:var(--mono);font-size:.61rem;color:var(--o);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.nc-title{font-family:var(--display);font-size:.98rem;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:-.01em}
+.nc-desc{font-size:.81rem;color:var(--i2);line-height:1.58}
+
+/* CTA STRIP */
+.cta-strip{margin-top:72px;padding:52px 56px;border:1px solid var(--bdr);border-radius:10px;background:var(--ink);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:32px}
+.cta-strip::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(212,80,10,.14) 0%,transparent 65%);pointer-events:none}
+.cta-strip-l .eyebrow{color:rgba(247,243,238,.4)}
+.cta-strip-l h2{color:var(--bg);margin-bottom:0;font-style:italic}
+.cta-strip-r{flex-shrink:0;display:flex;gap:10px}
+.cta-btn{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;font-weight:600;letter-spacing:.03em;padding:12px 22px;border-radius:4px;text-decoration:none;transition:all .2s var(--spring);white-space:nowrap}
+.cta-btn.solid{background:var(--o);color:#fff;border:1.5px solid var(--o)}
+.cta-btn.solid:hover{background:var(--o2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,80,10,.3)}
+.cta-btn.ghost{background:transparent;color:rgba(247,243,238,.7);border:1.5px solid rgba(247,243,238,.18)}
+.cta-btn.ghost:hover{border-color:rgba(247,243,238,.5);color:var(--bg);transform:translateY(-2px)}
+
+/* FOOTER */
+footer{padding:44px 0;border-top:1px solid var(--bdr);background:var(--bg2);position:relative}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:.2}
+.foot-inner{max-width:1160px;margin:0 auto;padding:0 52px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.foot-sig{font-family:var(--display);font-size:1rem;font-style:italic;color:var(--ink);margin-bottom:3px}
+.foot-sig b{font-style:normal;color:var(--o)}
+.foot-sub{font-family:var(--mono);font-size:.64rem;color:var(--i4);letter-spacing:.05em}
+.foot-links{display:flex;gap:5px}
+.foot-links a{font-family:var(--mono);font-size:.7rem;font-weight:500;color:var(--i3);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;padding:7px 13px;border-radius:4px;border:1px solid var(--bdr);transition:all .16s}
+.foot-links a:hover{color:var(--o);border-color:var(--olin);background:var(--odim)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.fu{opacity:0;animation:fadeUp .7s var(--spring) forwards}
+.d0{animation-delay:0s}.d1{animation-delay:.12s}.d2{animation-delay:.24s}
+.d3{animation-delay:.36s}.d4{animation-delay:.48s}.d5{animation-delay:.6s}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s var(--spring),transform .65s var(--spring)}
+.reveal.on{opacity:1;transform:translateY(0)}
+.reveal.r1{transition-delay:.07s}.reveal.r2{transition-delay:.14s}
+.reveal.r3{transition-delay:.21s}.reveal.r4{transition-delay:.28s}
+.math-bg{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.mg{position:absolute;font-family:var(--display);font-style:italic;color:var(--o);opacity:0;animation:mgDrift linear infinite}
+@keyframes mgDrift{0%{opacity:0;transform:translateY(0) rotate(-5deg) scale(.9)}5%{opacity:.7}88%{opacity:.04}100%{opacity:0;transform:translateY(-105vh) rotate(20deg) scale(1.08)}}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .hero-split{flex-direction:column;min-height:auto}
+  .hero-l{border-right:none;padding:64px 52px 52px}
+  .hero-r{width:100%;border-top:1px solid var(--bdr)}
+  .stat-bento{grid-template-rows:auto auto auto}
+  .pc.feat{grid-template-columns:1fr;grid-column:unset}
+  .pc.feat .pc-img{height:220px}
+  .research-wrap{grid-template-columns:1fr}
+  .research-side{display:none}
+  .now-grid{grid-template-columns:1fr 1fr}
+  .timeline::before{left:128px}
+  .tl-row{grid-template-columns:100px 56px 1fr}
+  .cta-strip{flex-direction:column;text-align:center}
+  .cta-strip-r{justify-content:center}
+}
+@media(max-width:768px){
+  .wrap,.nav-inner,.foot-inner{padding-left:22px;padding-right:22px}
+  nav .nav-links,.nav-cta{display:none}
+  .projects-grid{grid-template-columns:1fr}
+  .now-grid{grid-template-columns:1fr}
+  h2{font-size:1.85rem}
+  .hero-name{font-size:3.2rem}
+  .hero-l{padding:52px 22px 40px}
+  .research-main{padding:28px 24px}
+  .cta-strip{padding:32px 28px}
+  .timeline::before{display:none}
+  .tl-row{grid-template-columns:1fr;gap:4px}
+  .tl-dot-col{display:none}
+  .tl-year{text-align:left;padding-right:0;padding-bottom:2px}
+  .tl-body{padding-left:0}
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<canvas id="grain" aria-hidden="true"></canvas>
+<div id="cursor-glow" aria-hidden="true"></div>
+<div class="math-bg" id="mathbg" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-mark">L</div>
+      <span class="nav-logo-name">Lillian <b>Wang</b></span>
+    </a>
+    <div class="nav-r">
+      <ul class="nav-links">
+        <li><a href="#hero">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#now">Now</a></li>
+      </ul>
+      <a href="mailto:lw3319@princeton.edu" class="nav-cta">say hello →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track" id="marquee-track"></div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-split">
+
+    <!-- LEFT -->
+    <div class="hero-l">
+      <div class="badge-row fu d0">
+        <div class="princeton-badge">
+          <div class="princeton-shield">P</div>
+          <span class="princeton-text">Princeton University · Class of '29</span>
+        </div>
+        <div class="live-chip">
+          <span class="live-dot"></span>
+          Open to research
+        </div>
+      </div>
+
+      <h1 class="hero-name fu d1">
+        <span class="line1">mathematician,</span>
+        Lillian<br/>
+        <em>Wang.</em>
+      </h1>
+
+      <div class="hero-kicker fu d2">
+        <span class="kicker-prompt">~/</span>
+        <span id="kicker-text"></span><span class="cursor-blink"></span>
+      </div>
+
+      <div class="hero-bio fu d3">
+        <p>Freshman at <strong>Princeton</strong> studying mathematics — drawn to systems-level problems at the intersection of energy, computation, and policy. Chasing a PhD in applied math and shipping open-source tools along the way.</p>
+        <p>This summer I'm joining the <a href="https://zero.lab.princeton.edu/" target="_blank" rel="noopener">ZERO Lab</a> at Princeton HMEI — building software for energy systems optimization models under Jesse Jenkins.</p>
+        <p>When I'm not doing math, I'm probably reading fanfic or arguing about Law&nbsp;&amp;&nbsp;Order.</p>
+      </div>
+
+      <div class="hero-ctas fu d4">
+        <a href="https://github.com/lillianwang112" class="btn btn-fill" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="mailto:lw3319@princeton.edu" class="btn btn-line">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          lw3319@princeton.edu
+        </a>
+      </div>
+
+      <div class="chips fu d5">
+        <span class="chip lit">Applied Math</span>
+        <span class="chip lit">Energy Systems</span>
+        <span class="chip lit">Comp. Social Science</span>
+        <span class="chip">React</span>
+        <span class="chip">Python</span>
+        <span class="chip">LaTeX / KaTeX</span>
+        <span class="chip">Firebase</span>
+        <span class="chip">NLP</span>
+        <span class="chip">Mandarin</span>
+      </div>
+    </div>
+
+    <!-- RIGHT — stat bento -->
+    <div class="hero-r fu d1">
+      <div class="hr-accent"></div>
+      <div class="stat-bento">
+
+        <div class="sb">
+          <div class="sb-n" data-target="4" data-suf="">4</div>
+          <div>
+            <div class="sb-label">Tools shipped</div>
+            <div class="sb-sub">single-file · zero install</div>
+          </div>
+        </div>
+
+        <div class="sb">
+          <div class="sb-n" data-target="900" data-suf="+">900<sup>+</sup></div>
+          <div>
+            <div class="sb-label">Vocab cards</div>
+            <div class="sb-sub">SM-2 · CHI 108</div>
+          </div>
+        </div>
+
+        <div class="sb">
+          <div class="sb-n" data-target="238" data-suf="">238</div>
+          <div>
+            <div class="sb-label">Git commits</div>
+            <div class="sb-sub">汉语学习 alone</div>
+          </div>
+        </div>
+
+        <div class="sb">
+          <div class="sb-n" data-target="3" data-suf="">3</div>
+          <div>
+            <div class="sb-label">Discourse clusters</div>
+            <div class="sb-sub">Girard × AI · PRD '26</div>
+          </div>
+        </div>
+
+        <div class="sb wide">
+          <div class="sb-glyph">∞</div>
+          <div class="sb-n">∞</div>
+          <div>
+            <div class="sb-label">Problems left to solve</div>
+            <div class="sb-sub">working on it</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="hr-profile">
+        <div class="hr-avatar">L</div>
+        <div>
+          <div class="hr-profile-name">Lillian Wang</div>
+          <div class="hr-profile-sub">Princeton '29 · Math · ZERO Lab</div>
+        </div>
+        <div class="hr-profile-links">
+          <a href="https://github.com/lillianwang112" class="hr-pl" target="_blank" rel="noopener">GitHub</a>
+          <a href="mailto:lw3319@princeton.edu" class="hr-pl">Email</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.hero-split -->
+
+  <div class="wrap">
+    <div class="hero-foot">
+      <span class="hf-line"></span>
+      <span>Scroll to explore</span>
+      <div class="hf-arrow">↓</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="sec">
+  <div class="sec-index">Work — 01</div>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Work — 01</div>
+      <h2>Things I've built</h2>
+      <p class="sec-desc">Open-source tools born from specific frustrations. Every project ships as a single file or PWA — no build step, no server, no nonsense.</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="pc feat reveal r1">
+        <div class="pc-img">
+          <img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/screenshots/hero.png" alt="Axiom" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback axiom-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(99,179,237,.5)\'>∑</span><span class=\'fallback-label\'>axiom-study</span></div>'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/icons/icon-192x192.png" alt="Axiom icon" onerror="this.style.display='none'"/></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-num">01 / Featured</div>
+          <div class="pc-head"><span class="pc-name">Axiom</span><span class="pc-tag">Math Tool</span></div>
+          <p class="pc-desc">A math study environment built for active recall — because reading past theorems isn't the same as knowing them. Paste lecture notes or textbook LaTeX and Axiom structures them into collapsible definitions, theorems, lemmas, and proofs. Problem sets link back to relevant sections, a flashcard review mode drills every block, and a context-aware AI tutor is one click away. KaTeX rendering, Firebase sync, study streak tracking.</p>
+          <div class="pc-pills"><span class="pp">KaTeX</span><span class="pp">Firebase</span><span class="pp">Puter.js</span><span class="pp">GitHub Pages</span></div>
+          <div class="pc-links">
+            <a href="https://lillianwang112.github.io/axiom-study/" class="pl launch" target="_blank" rel="noopener">↗ Launch App</a>
+            <a href="https://github.com/lillianwang112/axiom-study" class="pl" target="_blank" rel="noopener">Source</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc reveal r1">
+        <div class="pc-img">
+          <img src="https://raw.githubusercontent.com/lillianwang112/chinese-learning-app/main/screenshots/hero.jpeg" alt="中文-Learn" class="img-hanzi" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback hanzi-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(74,222,128,.4)\'>汉</span><span class=\'fallback-label\'>chinese-learning-app</span></div>'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/chinese-learning-app/main/icons/icon-72.png" alt="" onerror="this.style.display='none'"/></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-num">02</div>
+          <div class="pc-head"><span class="pc-name">中文-Learn</span><span class="pc-tag">Study App</span></div>
+          <p class="pc-desc">A full-featured Chinese vocabulary app built for Princeton's CHI 108 — because Quizlet wasn't cutting it. 900+ vocab cards across 25 topic decks, SM-2 spaced repetition, animated stroke-order handwriting practice, AI grading, and six study modes. 238 commits and counting.</p>
+          <div class="pc-pills"><span class="pp">React</span><span class="pp">Firebase</span><span class="pp">Hanzi Writer</span><span class="pp">SM-2</span></div>
+          <div class="pc-links">
+            <a href="https://lillianwang112.github.io/chinese-learning-app/" class="pl launch" target="_blank" rel="noopener">↗ Launch</a>
+            <a href="https://github.com/lillianwang112/chinese-learning-app" class="pl" target="_blank" rel="noopener">Source</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc reveal r2">
+        <div class="pc-img">
+          <img src="https://raw.githubusercontent.com/lillianwang112/tiger-calendar/main/screenshots/hero.png" alt="TigerCalendar" class="img-tiger" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback tiger-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(251,191,36,.4)\'>🐯</span><span class=\'fallback-label\'>tiger-calendar</span></div>'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/tiger-calendar/main/icons/icon-96x96.png" alt="" onerror="this.style.display='none'"/></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-num">03</div>
+          <div class="pc-head"><span class="pc-name">TigerCalendar</span><span class="pc-tag">PWA</span></div>
+          <p class="pc-desc">A Princeton-specific calendar PWA that turns your course schedule into something actually usable. Drag-to-create events, office hours tracking, ICS export, swipe navigation, Firebase sync. Designed around how Princeton students actually plan their weeks.</p>
+          <div class="pc-pills"><span class="pp">React</span><span class="pp">Firebase</span><span class="pp">GitHub Pages</span></div>
+          <div class="pc-links">
+            <a href="https://lillianwang112.github.io/tiger-calendar/" class="pl launch" target="_blank" rel="noopener">↗ Launch</a>
+            <a href="https://github.com/lillianwang112/tiger-calendar" class="pl" target="_blank" rel="noopener">Source</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc reveal r3">
+        <div class="pc-img">
+          <img src="https://raw.githubusercontent.com/lillianwang112/PokeRace/main/screenshots/hero.jpeg" alt="PokéRace" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback poke-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(212,80,10,.5)\'>⚡</span><span class=\'fallback-label\'>PokéRace · typing race game</span></div>'"/>
+        </div>
+        <div class="pc-body">
+          <div class="pc-num">04</div>
+          <div class="pc-head"><span class="pc-name">PokéRace</span><span class="pc-tag">Game</span></div>
+          <p class="pc-desc">A Pokémon typing race game that turns your study material into a speed challenge. Race bots, level up 20 Pokémon with unique passives, earn XP from lecture notes. Full combo system, Nitro Boost mechanics, 60fps canvas trail renderer — one HTML file.</p>
+          <div class="pc-pills"><span class="pp">React</span><span class="pp">Canvas API</span><span class="pp">Web Audio API</span><span class="pp">localStorage</span></div>
+          <div class="pc-links">
+            <a href="https://lillianwang112.github.io/PokeRace/" class="pl launch" target="_blank" rel="noopener">↗ Launch</a>
+            <a href="https://github.com/lillianwang112/PokeRace" class="pl" target="_blank" rel="noopener">Source</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BACKGROUND -->
+<section id="background" class="sec">
+  <div class="sec-index">Background — 02</div>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Background — 02</div>
+      <h2>How I got here</h2>
+      <p class="sec-desc">From competition math and summer programs to Princeton and applied research.</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-row reveal r1">
+        <div class="tl-year">2026</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">ZERO Lab — Princeton HMEI</div>
+          <div class="tl-sub">Software Engineer · Energy Systems</div>
+          <div class="tl-desc">Joining Jesse Jenkins' group at Princeton's High Meadows Environmental Institute. Building software for energy systems optimization models — real tools for real climate policy. Starting June 1.</div>
+          <div class="tl-tags"><span class="tl-tag">Python</span><span class="tl-tag">Optimization</span><span class="tl-tag">Energy Systems</span><span class="tl-tag">HMEI</span></div>
+        </div>
+      </div>
+
+      <div class="tl-row reveal r1">
+        <div class="tl-year">2026</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">Princeton Research Day</div>
+          <div class="tl-sub">Nominated Presenter · Computational Social Science</div>
+          <div class="tl-desc">Presented original research applying René Girard's theory of triangular desire to user-generated discourse on AI companion platforms (r/Replika, r/CharacterAI). Identified three discourse clusters using seeded LDA, VADER, NRC, and eMFD analysis.</div>
+          <div class="tl-tags"><span class="tl-tag">NLP</span><span class="tl-tag">Seeded LDA</span><span class="tl-tag">VADER</span><span class="tl-tag">Girard Theory</span></div>
+        </div>
+      </div>
+
+      <div class="tl-row reveal r2">
+        <div class="tl-year">2026</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">JMM 2026 Poster</div>
+          <div class="tl-sub">Joint Mathematics Meetings · Selected Poster</div>
+          <div class="tl-desc">Original research on Smith Normal Form of matrix powers selected for a poster presentation at the Joint Mathematics Meetings — work done through the PROMYS Research Lab.</div>
+          <div class="tl-tags"><span class="tl-tag">Linear Algebra</span><span class="tl-tag">Smith Normal Form</span><span class="tl-tag">Number Theory</span></div>
+        </div>
+      </div>
+
+      <div class="tl-row reveal r2">
+        <div class="tl-year">2025</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">Princeton University</div>
+          <div class="tl-sub">B.A. Mathematics · Class of 2029</div>
+          <div class="tl-desc">Studying mathematics with a focus on applied and computational directions. Current courses: MAT217, ECO310, COS126, CHI108. Mathey College. PhD track.</div>
+          <div class="tl-tags"><span class="tl-tag">Applied Math</span><span class="tl-tag">Honors Track</span><span class="tl-tag">Mathey College</span></div>
+        </div>
+      </div>
+
+      <div class="tl-row reveal r3">
+        <div class="tl-year">2024</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">Modeling the Future Challenge</div>
+          <div class="tl-sub">2nd Place · National Competition</div>
+          <div class="tl-desc">Second-place finish in this national actuarial modeling competition. Built predictive models under real-world constraints and presented findings to a panel of industry judges.</div>
+          <div class="tl-tags"><span class="tl-tag">ML Modeling</span><span class="tl-tag">Actuarial</span><span class="tl-tag">Data Science</span></div>
+        </div>
+      </div>
+
+      <div class="tl-row reveal r3">
+        <div class="tl-year">2023–24</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">PROMYS at Boston University</div>
+          <div class="tl-sub">Participant (×2) · Research Lab</div>
+          <div class="tl-desc">Attended the Program in Mathematics for Young Scientists twice — the second time as a returning student in the Research Lab, where I conducted original work on Smith Normal Form of matrix powers.</div>
+          <div class="tl-tags"><span class="tl-tag">Number Theory</span><span class="tl-tag">Research</span><span class="tl-tag">Boston University</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research" class="sec">
+  <div class="sec-index">Research — 03</div>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Research — 03</div>
+      <h2>What I'm studying</h2>
+      <p class="sec-desc">Computational social science at the intersection of desire theory, AI companionship, and online discourse.</p>
+    </div>
+    <div class="research-wrap">
+      <div class="research-main reveal r1">
+        <div class="rv">
+          <span class="rv-chip">Princeton Research Day 2026</span>
+          <span class="rv-label">Nominated Presenter · Computational Social Science</span>
+        </div>
+        <div class="rt">Triangular Desire in the Age of Algorithmic Companions:<br/><em>How Users Narrate Relationships with AI on Reddit</em></div>
+        <p class="ra">Applied René Girard's theory of triangular (mimetic) desire to user-generated discourse on AI companion platforms — specifically <span class="hl">r/Replika</span> and <span class="hl">r/CharacterAI</span>. Used computational text analysis to map how users construct, narrate, and justify their emotional relationships with AI systems, and whether those relationships follow recognizable patterns of mediated desire.</p>
+        <div class="methods"><span class="mt">Seeded LDA</span><span class="mt">VADER Sentiment Analysis</span><span class="mt">NRC Emotion Lexicon</span><span class="mt">Extended MFD</span><span class="mt">Discourse Clustering</span><span class="mt">Reddit API</span></div>
+        <div class="finding"><p>Identified <strong>three distinct discourse clusters</strong> — "Lobotomized Love," "Violation of Sanctuary," and "Consumer Revolt" — mapping onto distinct modes of Girardian mediation.</p></div>
+      </div>
+      <div class="research-side reveal r2">
+        <div class="rs-card"><div class="rs-label">Venue</div><div class="rs-val">Princeton<br/>Research Day</div><div class="rs-desc">2026 · Nominated Presenter</div></div>
+        <div class="rs-card"><div class="rs-label">Field</div><div class="rs-val">Comp. Social Science</div><div class="rs-desc">NLP · Discourse Analysis</div></div>
+        <div class="rs-card"><div class="rs-label">Theory</div><div class="rs-val">Girardian<br/>Mediation</div><div class="rs-desc">Triangular desire applied to AI platforms</div></div>
+        <div class="rs-card"><div class="rs-label">Finding</div><div class="rs-val">3 clusters</div><div class="rs-desc">Distinct modes of AI relationship narration</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOW -->
+<section id="now" class="sec">
+  <div class="sec-index">Now — 04</div>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Now — 04</div>
+      <h2>What's on my mind</h2>
+    </div>
+    <div class="now-grid">
+      <div class="nc feat reveal r1"><span class="nc-ico">⚡</span><div class="nc-label">Coming Up</div><div class="nc-title">ZERO Lab · Princeton HMEI</div><p class="nc-desc">Joining Jesse Jenkins' energy systems optimization group. Building real software for real energy policy. Starts June 1.</p></div>
+      <div class="nc reveal r1"><span class="nc-ico">∑</span><div class="nc-label">Building</div><div class="nc-title">Iterating on Axiom</div><p class="nc-desc">Improving the LaTeX parser, adding collaborative study rooms, refining the AI tutor's proof-checking.</p></div>
+      <div class="nc reveal r2"><span class="nc-ico">🐯</span><div class="nc-label">Building</div><div class="nc-title">TigerCalendar v2</div><p class="nc-desc">Loading skeleton, dropdown view selector, ICS export rework. Drafting a pitch for Princeton registrar API access.</p></div>
+      <div class="nc reveal r3"><span class="nc-ico">📖</span><div class="nc-label">Studying</div><div class="nc-title">CHI 108 SRS Review</div><p class="nc-desc">Reviewing ~419 remaining vocabulary cards through my own spaced repetition app. Eating the dog food.</p></div>
+    </div>
+    <div class="cta-strip reveal r4">
+      <div class="cta-strip-l">
+        <div class="eyebrow">Want to work together?</div>
+        <h2>Let's build something.</h2>
+      </div>
+      <div class="cta-strip-r">
+        <a href="mailto:lw3319@princeton.edu" class="cta-btn solid">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Say hello
+        </a>
+        <a href="https://github.com/lillianwang112" class="cta-btn ghost" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-sig">Built by <b>Lillian Wang</b></div>
+      <div class="foot-sub">Princeton '29 · Mathematics · Applied Math PhD Track</div>
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/lillianwang112" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:lw3319@princeton.edu">Email</a>
+      <a href="#hero">Top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* scroll progress */
+const pb=document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{pb.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%'},{passive:true});
+
+/* grain */
+(function(){const c=document.getElementById('grain'),ctx=c.getContext('2d');let w,h,f=0;function resize(){c.width=w=innerWidth;c.height=h=innerHeight}function draw(){const img=ctx.createImageData(w,h),d=img.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=14}ctx.putImageData(img,0,0)}function loop(){if(f++%3===0)draw();requestAnimationFrame(loop)}resize();addEventListener('resize',resize);loop()})();
+
+/* cursor glow */
+const glow=document.getElementById('cursor-glow');
+let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function lerp(){cx+=(mx-cx)*.08;cy+=(my-cy)*.08;glow.style.left=cx+'px';glow.style.top=cy+'px';requestAnimationFrame(lerp)})();
+
+/* nav */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20),{passive:true});
+
+/* reveal */
+const obs=new IntersectionObserver((es)=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*60)})},{threshold:.05,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* marquee */
+(function(){
+  const items=[
+    {t:"Applied Mathematics · Princeton '29",h:true},{t:'ZERO Lab · Energy Systems Optimization',h:false},
+    {t:'Princeton Research Day 2026',h:false},{t:'PROMYS · Boston University',h:false},
+    {t:'Smith Normal Form · JMM 2026',h:false},{t:'4 open-source tools shipped',h:false},
+    {t:'238 commits · 汉语学习',h:true},{t:'MAT217 · Honors Linear Algebra',h:false},
+    {t:'Modeling the Future · 2nd Place',h:false},{t:'Girardian Discourse Analysis',h:false},
+    {t:'Ravenclaw · obviously',h:true},
+  ];
+  const track=document.getElementById('marquee-track');
+  [...items,...items].forEach(it=>{
+    const s=document.createElement('span');
+    s.className='marquee-item'+(it.h?' hl':'');
+    s.innerHTML=`${it.t}<span class="dot">◆</span>`;
+    track.appendChild(s);
+  });
+})();
+
+/* math glyphs */
+['∫','∑','∂','∇','∞','π','φ','λ','ε','δ','Δ','∈','⊕','≡','∼','∀','∃','⟨','⟩','‖','ℝ','ℕ','⊂','∩','∪'].forEach(g=>{
+  const el=document.createElement('span');el.className='mg';el.textContent=g;
+  const sz=14+Math.random()*24;
+  el.style.cssText=`left:${4+Math.random()*92}%;bottom:-80px;font-size:${sz}px;animation-duration:${22+Math.random()*28}s;animation-delay:${Math.random()*-30}s;opacity:0`;
+  document.getElementById('mathbg').appendChild(el);
+});
+
+/* typewriter */
+(function(){
+  const phrases=['applied.math.phd_track()','build(tools_I_wish_existed)','energy_systems.optimize()','learning.mandarin = true','pursuit_of_proof.continue()'];
+  let pi=0,ci=0,del=false,wait=0;
+  const el=document.getElementById('kicker-text');
+  function tick(){
+    const p=phrases[pi];
+    if(del){ci--;el.textContent=p.slice(0,ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;wait=18}}
+    else{ci++;el.textContent=p.slice(0,ci);if(ci===p.length){del=true;wait=52}}
+    if(wait>0){wait--;setTimeout(tick,80);return}
+    setTimeout(tick,del?42:58);
+  }
+  setTimeout(tick,900);
+})();
+
+/* stat counters */
+function animCount(el,target,suf){
+  let s=null;const dur=1400;
+  (function step(ts){if(!s)s=ts;const p=Math.min((ts-s)/dur,1),ease=1-Math.pow(1-p,3),v=Math.round(ease*target);el.innerHTML=v+(suf?`<sup>${suf}</sup>`:'');if(p<1)requestAnimationFrame(step)})(performance.now());
+}
+new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const n=e.target.querySelector('.sb-n');if(!n||n.dataset.counted)return;n.dataset.counted='1';const t=n.dataset.target,s=n.dataset.suf||'';if(t&&t!=='Infinity')animCount(n,+t,s)}})},{threshold:.3}).observe(document.querySelector('.stat-bento')||document.body);
+
+/* magnetic cards */
+document.querySelectorAll('.pc').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`translateY(-6px) rotateX(${y*-4}deg) rotateY(${x*4}deg)`});
+  c.addEventListener('mouseleave',()=>c.style.transform='');
+});
+</script>
+</body>
+</html>
