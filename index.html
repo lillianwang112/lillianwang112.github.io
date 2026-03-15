@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Lillian Wang</title>
+  <meta name="description" content="Lillian Wang — Math @ Princeton '29. Building tools I wish existed."/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∿</text></svg>"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --o:#E8590C;--o2:#f47c3c;--o3:#ff9a5c;
+      --odim:rgba(232,89,12,.10);--olin:rgba(232,89,12,.22);
+      --ink:#16120e;--i2:#352d27;--i3:#7a6f68;--i4:#b0a49d;
+      --bg:#f9f6f1;--bg2:#f2ede5;--bg3:#e9e0d4;
+      --bdr:rgba(22,18,14,.09);
+      --serif:'Lora',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+      --mono:'DM Mono',monospace;
+      --ease:cubic-bezier(.22,1,.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;font-size:16px}
+    body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+    body::after{
+      content:'';position:fixed;inset:0;z-index:999;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity:.5;mix-blend-mode:multiply;
+    }
+    .wrap{max-width:1160px;margin:0 auto;padding:0 48px;position:relative;z-index:1}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:200;background:rgba(249,246,241,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr)}
+    .nav-inner{max-width:1160px;margin:0 auto;padding:0 48px;height:58px;display:flex;align-items:center;justify-content:space-between}
+    .nav-sig{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--ink);text-decoration:none}
+    .nav-sig b{font-style:normal;color:var(--o);font-weight:700}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{font-size:.75rem;font-weight:500;color:var(--i3);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .18s}
+    .nav-links a:hover{color:var(--o)}
+
+    /* HERO */
+    #about{padding:0;min-height:92vh;display:grid;grid-template-rows:1fr auto;position:relative;overflow:hidden}
+    .hero-canvas{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 110% 40%,rgba(232,89,12,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at -10% 80%,rgba(232,89,12,.04) 0%,transparent 55%)}
+    .math-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .math-glyph{position:absolute;font-family:var(--serif);font-style:italic;color:var(--o);opacity:0;animation:glyphDrift linear infinite}
+    @keyframes glyphDrift{0%{opacity:0;transform:translateY(0) rotate(0deg)}8%{opacity:1}90%{opacity:.08}100%{opacity:0;transform:translateY(-100vh) rotate(20deg)}}
+    .hero-body-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:center;min-height:88vh;position:relative;z-index:2}
+    .hero-left{padding:100px 64px 80px 0}
+    .hero-right{padding:80px 0 80px 64px;border-left:1px solid var(--bdr);display:flex;flex-direction:column;justify-content:center;min-height:88vh}
+    .live-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--i3);text-transform:uppercase;margin-bottom:36px}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 0 3px rgba(34,197,94,.18);animation:livePulse 2.5s ease-in-out infinite}
+    @keyframes livePulse{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.18)}50%{box-shadow:0 0 0 7px rgba(34,197,94,.04)}}
+    .hero-name{font-family:var(--serif);font-size:clamp(3.2rem,5.5vw,5rem);font-weight:700;line-height:1.08;letter-spacing:-.03em;color:var(--ink);margin-bottom:8px}
+    .hero-name .line2{font-style:italic;color:var(--o);display:block}
+    .hero-tagline{font-family:var(--mono);font-size:.8rem;color:var(--i3);letter-spacing:.06em;margin-bottom:32px;display:flex;align-items:center;gap:12px}
+    .hero-tagline::before{content:'';display:block;width:32px;height:1px;background:var(--bdr);flex-shrink:0}
+    .hero-bio{font-size:1.05rem;line-height:1.8;color:var(--i2);max-width:480px;margin-bottom:36px}
+    .hero-bio p+p{margin-top:14px}
+    .hero-bio a{color:var(--o);text-underline-offset:3px}
+    .hero-bio strong{color:var(--ink);font-weight:600}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:44px}
+    .btn{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:600;letter-spacing:.02em;padding:10px 20px;border-radius:5px;text-decoration:none;border:1.5px solid transparent;transition:all .2s var(--ease)}
+    .btn-solid{background:var(--o);color:#fff;border-color:var(--o)}
+    .btn-solid:hover{background:var(--o2);transform:translateY(-2px);box-shadow:0 8px 20px rgba(232,89,12,.25)}
+    .btn-out{background:transparent;color:var(--i2);border-color:var(--bdr)}
+    .btn-out:hover{border-color:var(--i3);color:var(--ink);transform:translateY(-2px)}
+    .tag-cloud{display:flex;flex-wrap:wrap;gap:6px}
+    .tc{font-family:var(--mono);font-size:.67rem;padding:3px 9px;border-radius:3px;letter-spacing:.03em;background:var(--bg2);border:1px solid var(--bdr);color:var(--i2);transition:all .18s;cursor:default}
+    .tc:hover{border-color:var(--olin);color:var(--o);background:var(--odim)}
+    .tc.lit{background:var(--odim);border-color:var(--olin);color:var(--o)}
+    .stat-stack{display:flex;flex-direction:column;gap:0;padding:0 48px}
+    .stat-item{padding:28px 0;border-bottom:1px solid var(--bdr);position:relative}
+    .stat-item:first-child{padding-top:0}
+    .stat-item:last-child{border-bottom:none}
+    .stat-num{font-family:var(--serif);font-size:clamp(2.6rem,4vw,3.6rem);font-weight:700;color:var(--o);line-height:1;letter-spacing:-.03em}
+    .stat-label{font-size:.8rem;color:var(--i3);margin-top:4px;letter-spacing:.02em}
+    .stat-sub{font-family:var(--mono);font-size:.65rem;color:var(--i4);margin-top:2px}
+    .hero-scroll{padding:24px 0;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--i4);text-transform:uppercase;position:relative;z-index:2}
+    .scroll-line{width:40px;height:1px;background:var(--bg3)}
+
+    /* SECTIONS */
+    .section{padding:96px 0}
+    .section+.section{border-top:1px solid var(--bdr)}
+    .eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--o);margin-bottom:10px}
+    h2{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin-bottom:10px}
+    .sh-desc{font-size:.95rem;color:var(--i3);max-width:520px;line-height:1.65}
+    .sec-num{font-family:var(--mono);font-size:.65rem;color:var(--bg3);letter-spacing:.1em;position:absolute;right:48px;top:96px;writing-mode:vertical-rl;user-select:none;pointer-events:none}
+
+    /* PROJECTS */
+    .projects-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+    .pc{background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:32px 36px;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:border-color .22s,box-shadow .22s,transform .22s;text-decoration:none;color:inherit}
+    .pc::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(135deg,var(--odim) 0%,transparent 60%);opacity:0;transition:opacity .3s}
+    .pc:hover{border-color:var(--olin);box-shadow:0 12px 40px rgba(232,89,12,.08);transform:translateY(-4px)}
+    .pc:hover::before{opacity:1}
+    .pc.feat{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start;padding:40px 44px}
+    .pc-number{font-family:var(--mono);font-size:.65rem;color:var(--i4);letter-spacing:.1em;margin-bottom:14px}
+    .pc-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .pc-icon{font-size:1.3rem;line-height:1}
+    .pc-name{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+    .pc.feat .pc-name{font-size:1.5rem}
+    .pc-badge{font-family:var(--mono);font-size:.62rem;padding:2px 8px;border-radius:2px;background:var(--odim);color:var(--o);letter-spacing:.07em;text-transform:uppercase}
+    .pc-desc{font-size:.9rem;color:var(--i2);line-height:1.68;flex:1;margin-bottom:18px}
+    .pc-stack{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px}
+    .pill{font-family:var(--mono);font-size:.62rem;padding:2px 8px;border-radius:3px;background:var(--bg2);border:1px solid var(--bdr);color:var(--i3)}
+    .pc-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+    .pc.feat .pc-actions{flex-direction:column;align-items:flex-end;justify-content:flex-start;margin-top:0}
+    .pa{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;font-weight:500;padding:6px 13px;border-radius:4px;text-decoration:none;white-space:nowrap;border:1px solid var(--bdr);color:var(--i3);transition:all .15s}
+    .pa:hover{color:var(--o);border-color:var(--olin)}
+    .pa.go{background:var(--o);color:#fff;border-color:var(--o)}
+    .pa.go:hover{background:var(--o2);box-shadow:0 4px 14px rgba(232,89,12,.3)}
+
+    /* RESEARCH */
+    .research-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:52px 56px;position:relative;overflow:hidden}
+    .research-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--o),var(--o3),transparent)}
+    .research-card::after{content:'❝';position:absolute;right:44px;top:32px;font-family:var(--serif);font-size:8rem;color:var(--o);opacity:.055;line-height:1;pointer-events:none}
+    .rv{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:.68rem;color:var(--i3);letter-spacing:.06em;margin-bottom:20px}
+    .rv-pill{background:var(--o);color:#fff;padding:3px 10px;border-radius:2px;font-size:.63rem;letter-spacing:.08em;text-transform:uppercase}
+    .rt{font-family:var(--serif);font-size:1.45rem;font-weight:600;line-height:1.3;color:var(--ink);letter-spacing:-.01em;margin-bottom:20px}
+    .rt em{font-weight:400}
+    .ra{font-size:.92rem;color:var(--i2);line-height:1.8;margin-bottom:20px}
+    .hl{background:var(--odim);padding:1px 5px;border-radius:2px;color:var(--o);font-weight:500}
+    .methods{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+    .meth{font-family:var(--mono);font-size:.64rem;padding:3px 9px;border-radius:3px;background:var(--bg);border:1px solid var(--bdr);color:var(--i2)}
+    .finding{border-left:2px solid var(--o);padding:14px 20px;background:var(--odim);border-radius:0 6px 6px 0}
+    .finding p{font-size:.9rem;color:var(--i2);font-style:italic;line-height:1.7}
+    .finding strong{color:var(--o);font-style:normal}
+
+    /* NOW */
+    .now-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+    .now-card{padding:28px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg);transition:border-color .2s,transform .2s;position:relative;overflow:hidden}
+    .now-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--o),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+    .now-card:hover{border-color:var(--olin);transform:translateY(-3px)}
+    .now-card:hover::after{transform:scaleX(1)}
+    .now-card.feat{border-color:var(--olin);background:var(--odim)}
+    .now-card.feat::after{transform:scaleX(1)}
+    .now-ico{font-size:1.5rem;margin-bottom:14px}
+    .now-label{font-family:var(--mono);font-size:.63rem;color:var(--o);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+    .now-title{font-family:var(--serif);font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+    .now-desc{font-size:.82rem;color:var(--i2);line-height:1.55}
+
+    /* FOOTER */
+    footer{padding:48px 0;border-top:1px solid var(--bdr)}
+    .foot-inner{max-width:1160px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .foot-sig{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--i3)}
+    .foot-sig strong{font-style:normal;color:var(--o)}
+    .foot-links{display:flex;gap:24px}
+    .foot-links a{font-size:.75rem;font-weight:500;color:var(--i3);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:color .15s}
+    .foot-links a:hover{color:var(--o)}
+
+    /* ANIMATIONS */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .fu{opacity:0;animation:fadeUp .6s var(--ease) forwards}
+    .d1{animation-delay:.04s}.d2{animation-delay:.14s}.d3{animation-delay:.26s}
+    .d4{animation-delay:.38s}.d5{animation-delay:.50s}.d6{animation-delay:.62s}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+    .reveal.on{opacity:1;transform:translateY(0)}
+    .reveal.delay1{transition-delay:.08s}.reveal.delay2{transition-delay:.16s}
+    .reveal.delay3{transition-delay:.24s}.reveal.delay4{transition-delay:.32s}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .hero-body-wrap{grid-template-columns:1fr}
+      .hero-right{display:none}
+      .hero-left{padding:80px 0 60px}
+      .projects-layout{grid-template-columns:1fr}
+      .pc.feat{grid-column:unset;display:flex;flex-direction:column}
+      .pc.feat .pc-actions{flex-direction:row}
+      .now-grid{grid-template-columns:1fr 1fr}
+      .wrap{padding:0 24px}
+      .nav-inner,.foot-inner{padding:0 24px}
+    }
+    @media(max-width:600px){
+      nav .nav-links{display:none}
+      .now-grid{grid-template-columns:1fr}
+      .research-card{padding:28px 24px}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#about" class="nav-sig">Lillian <b>Wang</b></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#now">Now</a></li>
+      <li><a href="mailto:lw3319@princeton.edu">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section id="about">
+  <div class="hero-canvas"></div>
+  <div class="math-bg" aria-hidden="true" id="mathbg"></div>
+  <div class="wrap">
+    <div class="hero-body-wrap">
+      <div class="hero-left">
+        <div class="live-badge fu d1"><span class="live-dot"></span>Princeton '29 · Mathematics</div>
+        <h1 class="hero-name fu d2">Lillian<br/><span class="line2">Wang.</span></h1>
+        <div class="hero-tagline fu d3">Math · Code · Systems</div>
+        <div class="hero-bio fu d4">
+          <p>Freshman at <strong>Princeton</strong> studying mathematics — drawn to systems-level problems in energy, computation, and policy. Chasing a PhD in applied math and shipping open-source tools along the way.</p>
+          <p>This summer I'm joining the <a href="https://zero.lab.princeton.edu/" target="_blank" rel="noopener">ZERO Lab</a> at Princeton HMEI to build software for energy systems optimization under Jesse Jenkins.</p>
+          <p>When I'm not doing math or writing code, I'm probably reading a nice fic or watching Law&nbsp;&amp;&nbsp;Order.</p>
+        </div>
+        <div class="hero-ctas fu d5">
+          <a href="https://github.com/lillianwang112" class="btn btn-solid" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="mailto:lw3319@princeton.edu" class="btn btn-out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            lw3319@princeton.edu
+          </a>
+        </div>
+        <div class="tag-cloud fu d6">
+          <span class="tc lit">Applied Math</span><span class="tc lit">Energy Systems</span><span class="tc lit">Comp. Social Science</span>
+          <span class="tc">React</span><span class="tc">Python</span><span class="tc">LaTeX</span><span class="tc">Firebase</span><span class="tc">NLP</span>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="stat-stack">
+          <div class="stat-item reveal"><div class="stat-num">4</div><div class="stat-label">Open-source tools shipped</div><div class="stat-sub">all single-file · zero install</div></div>
+          <div class="stat-item reveal delay1"><div class="stat-num">900<span style="font-size:60%;color:var(--i3)">+</span></div><div class="stat-label">Chinese vocab cards</div><div class="stat-sub">SM-2 spaced repetition · CHI 108</div></div>
+          <div class="stat-item reveal delay2"><div class="stat-num">3</div><div class="stat-label">Discourse clusters identified</div><div class="stat-sub">Girard × AI companions · Research Day '26</div></div>
+          <div class="stat-item reveal delay3"><div class="stat-num">∞</div><div class="stat-label">Problems left to solve</div><div class="stat-sub">working on it</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap"><div class="hero-scroll"><span class="scroll-line"></span>Scroll to explore</div></div>
+</section>
+
+<section id="projects" class="section" style="position:relative">
+  <span class="sec-num">01 — Projects</span>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Work</div>
+      <h2>Things I've built</h2>
+      <p class="sh-desc">Open-source tools born from specific frustrations. Each ships as a single file — no build step, no server, no nonsense.</p>
+    </div>
+    <div class="projects-layout">
+      <div class="pc feat reveal delay1">
+        <div>
+          <div class="pc-number">01</div>
+          <div class="pc-header"><span class="pc-icon">∑</span><span class="pc-name">Axiom</span><span class="pc-badge">Math Tool</span></div>
+          <p class="pc-desc">A math study environment built for active recall. Paste lecture notes or textbook LaTeX and Axiom structures them into collapsible definitions, theorems, lemmas, and proofs. Problem sets link back to relevant sections, a flashcard review mode drills every block, and a context-aware AI tutor is one click away. KaTeX rendering, Firebase sync, study streak tracking.</p>
+          <div class="pc-stack"><span class="pill">KaTeX</span><span class="pill">Firebase</span><span class="pill">Puter.js</span><span class="pill">GitHub Pages</span></div>
+        </div>
+        <div class="pc-actions">
+          <a href="https://lillianwang112.github.io/axiom-study/" class="pa go" target="_blank" rel="noopener">↗ Launch App</a>
+          <a href="https://github.com/lillianwang112/axiom-study" class="pa" target="_blank" rel="noopener">Source</a>
+        </div>
+      </div>
+      <div class="pc reveal delay1">
+        <div class="pc-number">02</div>
+        <div class="pc-header"><span class="pc-icon">汉</span><span class="pc-name">汉语学习</span><span class="pc-badge">Study App</span></div>
+        <p class="pc-desc">A full-featured Chinese vocabulary app built for Princeton's CHI 108 — because Quizlet wasn't cutting it. 900+ vocab cards, SM-2 spaced repetition, animated stroke-order practice, AI grading, and six study modes. 238 commits and counting.</p>
+        <div class="pc-stack"><span class="pill">React</span><span class="pill">Tailwind</span><span class="pill">Firebase</span><span class="pill">Hanzi Writer</span><span class="pill">SM-2</span></div>
+        <div class="pc-actions" style="margin-top:auto;padding-top:16px">
+          <a href="https://lillianwang112.github.io/chinese-learning-app/" class="pa go" target="_blank" rel="noopener">↗ Launch</a>
+          <a href="https://github.com/lillianwang112/chinese-learning-app" class="pa" target="_blank" rel="noopener">Source</a>
+        </div>
+      </div>
+      <div class="pc reveal delay2">
+        <div class="pc-number">03</div>
+        <div class="pc-header"><span class="pc-icon">🐯</span><span class="pc-name">TigerCalendar</span><span class="pc-badge">PWA</span></div>
+        <p class="pc-desc">A Princeton-specific calendar PWA that turns your course schedule into something actually usable. Drag-to-create events, office hours tracking, ICS export, swipe navigation, and Firebase sync. Built for how Princeton students actually plan their weeks.</p>
+        <div class="pc-stack"><span class="pill">React</span><span class="pill">Firebase</span><span class="pill">GitHub Pages</span></div>
+        <div class="pc-actions" style="margin-top:auto;padding-top:16px">
+          <a href="https://lillianwang112.github.io/tiger-calendar/" class="pa go" target="_blank" rel="noopener">↗ Launch</a>
+          <a href="https://github.com/lillianwang112/tiger-calendar" class="pa" target="_blank" rel="noopener">Source</a>
+        </div>
+      </div>
+      <div class="pc reveal delay3">
+        <div class="pc-number">04</div>
+        <div class="pc-header"><span class="pc-icon">⚡</span><span class="pc-name">PokéRace</span><span class="pc-badge">Game</span></div>
+        <p class="pc-desc">A Pokémon typing race game that turns your study material into a speed challenge. Race bots, level up 20 Pokémon with unique passives, earn XP from your own lecture notes. Full combo system, Nitro Boost, 60fps canvas trails — one HTML file.</p>
+        <div class="pc-stack"><span class="pill">React</span><span class="pill">Canvas API</span><span class="pill">Web Audio</span><span class="pill">localStorage</span></div>
+        <div class="pc-actions" style="margin-top:auto;padding-top:16px">
+          <a href="https://lillianwang112.github.io/PokeRace/" class="pa go" target="_blank" rel="noopener">↗ Launch</a>
+          <a href="https://github.com/lillianwang112/PokeRace" class="pa" target="_blank" rel="noopener">Source</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="research" class="section" style="position:relative">
+  <span class="sec-num">02 — Research</span>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Research</div>
+      <h2>What I'm studying</h2>
+      <p class="sh-desc">Computational social science at the intersection of desire theory, AI companionship, and online discourse.</p>
+    </div>
+    <div class="research-card reveal delay1" style="margin-top:48px">
+      <div class="rv"><span class="rv-pill">Princeton Research Day 2026</span>Nominated Presenter · Computational Social Science</div>
+      <div class="rt">Triangular Desire in the Age of Algorithmic Companions:<br/><em>How Users Narrate Relationships with AI on Reddit</em></div>
+      <p class="ra">Applied René Girard's theory of triangular (mimetic) desire to user-generated discourse on AI companion platforms — specifically <span class="hl">r/Replika</span> and <span class="hl">r/CharacterAI</span>. Used computational text analysis to map how users construct, narrate, and justify their emotional relationships with AI systems, and whether those relationships follow recognizable patterns of mediated desire.</p>
+      <div class="methods">
+        <span class="meth">Seeded LDA</span><span class="meth">VADER Sentiment</span><span class="meth">NRC Emotion Lexicon</span><span class="meth">Extended MFD</span><span class="meth">Discourse Clustering</span><span class="meth">Reddit API</span>
+      </div>
+      <div class="finding"><p>Identified <strong>three distinct discourse clusters</strong> in how users narrate AI relationships — mapping onto distinct modes of Girardian mediation. The findings suggest AI companionship platforms reproduce dynamics of desire more faithfully than their design rationale acknowledges.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="now" class="section" style="position:relative">
+  <span class="sec-num">03 — Now</span>
+  <div class="wrap">
+    <div class="reveal"><div class="eyebrow">Now</div><h2>What's on my mind</h2></div>
+    <div class="now-grid">
+      <div class="now-card feat reveal delay1"><div class="now-ico">⚡</div><div class="now-label">Coming Up</div><div class="now-title">ZERO Lab · Princeton HMEI</div><p class="now-desc">Joining Jesse Jenkins' energy systems group to build optimization software. Starts June 1.</p></div>
+      <div class="now-card reveal delay1"><div class="now-ico">∑</div><div class="now-label">Building</div><div class="now-title">Iterating on Axiom</div><p class="now-desc">Improving the LaTeX parser, adding collaborative study rooms, refining AI proof-checking.</p></div>
+      <div class="now-card reveal delay2"><div class="now-ico">🐯</div><div class="now-label">Building</div><div class="now-title">TigerCalendar v2</div><p class="now-desc">Loading skeleton, dropdown view selector, ICS rework. Pitching for registrar API access.</p></div>
+      <div class="now-card reveal delay3"><div class="now-ico">📖</div><div class="now-label">Studying</div><div class="now-title">CHI 108 SRS Review</div><p class="now-desc">Reviewing ~419 remaining cards through my own SRS app. Eating the dog food.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-sig">Built by <strong>Lillian Wang</strong> · Princeton '29</div>
+    <div class="foot-links">
+      <a href="https://github.com/lillianwang112" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:lw3319@princeton.edu">Email</a>
+      <a href="#about">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('on'), i * 65);
+    });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  const glyphs = ['∫','∑','∂','∇','∞','π','φ','λ','ε','δ','Δ','∈','⊕','≡','∼','∀','∃','⟨','⟩','‖'];
+  const bg = document.getElementById('mathbg');
+  glyphs.forEach(g => {
+    const el = document.createElement('span');
+    el.className = 'math-glyph';
+    el.textContent = g;
+    const size = 14 + Math.random() * 22;
+    const left = 5 + Math.random() * 90;
+    const dur  = 18 + Math.random() * 24;
+    const del  = Math.random() * -20;
+    el.style.cssText = `left:${left}%;bottom:-60px;font-size:${size}px;animation-duration:${dur}s;animation-delay:${del}s;opacity:0;`;
+    bg.appendChild(el);
+  });
+</script>
+</body>
+</html>
