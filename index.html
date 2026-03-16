@@ -8,6 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<!-- Lenis smooth scroll -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js" defer></script>
 <style>
 :root{
   /* ── CRIMSON THEME ── */
@@ -32,7 +37,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+/* scroll-behavior removed — Lenis handles smooth scroll */
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
 /* ── GLOBAL SCROLL PROGRESS ── */
@@ -50,9 +55,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1
 /* ─────────────────────────
    NAV
 ───────────────────────── */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;transition:background .4s,box-shadow .4s}
-nav.scrolled{background:rgba(250,250,249,.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr)}
-.nav-inner{max-width:1160px;margin:0 auto;padding:0 52px;height:58px;display:flex;align-items:center;justify-content:space-between}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;transition:background .4s,box-shadow .4s,padding .3s}
+nav.scrolled{background:rgba(250,250,249,.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);box-shadow:0 1px 12px rgba(0,0,0,.06)}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 52px;height:58px;display:flex;align-items:center;justify-content:space-between;transition:height .3s var(--spring)}
+nav.scrolled .nav-inner{height:50px}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 
 .nav-logo-name{font-family:var(--display);font-style:italic;font-size:1.05rem;color:var(--ink);font-weight:400;letter-spacing:-.01em}
@@ -444,10 +450,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 /* ─────────────────────────
    ANIMATIONS
 ───────────────────────── */
-@keyframes fadeUp{0%{opacity:0;transform:translateY(32px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.fu{opacity:0;animation:fadeUp .75s var(--snap) forwards}
-.d0{animation-delay:0s}.d1{animation-delay:.15s}.d2{animation-delay:.3s}
-.d3{animation-delay:.45s}.d4{animation-delay:.6s}.d5{animation-delay:.75s}
+/* GSAP heroEntrance handles .fu elements — CSS animation removed */
+.fu{opacity:0}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s var(--spring),transform .65s var(--spring)}
 .reveal.on{opacity:1;transform:translateY(0)}
 .reveal.r1{transition-delay:.07s}.reveal.r2{transition-delay:.14s}
@@ -501,10 +505,12 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 ══════════════════════════════════════ */
 
 /* ── LOADING SCREEN ── */
-#loader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .65s var(--spring),visibility .65s}
-#loader.done{opacity:0;visibility:hidden;pointer-events:none}
-.loader-init{font-family:var(--display);font-style:italic;font-size:5rem;font-weight:700;color:var(--r);letter-spacing:-.06em;animation:loaderPulse .75s ease-out}
-@keyframes loaderPulse{0%{opacity:0;transform:scale(.82)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
+#loader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center}
+#loader.done{display:none}
+.loader-inner{display:flex;flex-direction:column;align-items:center;gap:18px}
+.loader-init{font-family:var(--display);font-style:italic;font-size:5rem;font-weight:700;color:var(--r);letter-spacing:-.06em}
+.loader-bar{width:120px;height:2px;background:var(--bdr2);border-radius:1px;overflow:hidden}
+.loader-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--r),var(--r3));border-radius:1px}
 
 /* ── CONSTELLATION CANVAS ── */
 #constellation{position:absolute;inset:0;z-index:1;pointer-events:none}
@@ -643,6 +649,32 @@ section{scroll-margin-top:80px}
   .c-ripple{display:none !important}
 }
 
+/* ── SECTION INDICATOR ── */
+#sec-indicator{
+  position:fixed;left:24px;top:50%;transform:translateY(-50%);
+  z-index:9996;display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;transition:opacity .4s;pointer-events:none;
+}
+#sec-indicator.visible{opacity:1}
+.si-line{width:1px;height:28px;background:var(--r);opacity:.4}
+.si-text{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--r);opacity:.6;
+}
+@media(max-width:1100px){#sec-indicator{display:none}}
+
+/* ── PROJECT CARD GLOW ── */
+.pc-glow{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity .3s;
+  border-radius:12px;overflow:hidden;
+}
+.pc:hover .pc-glow{opacity:1}
+
+/* ── PC-IMG WILL-CHANGE ── */
+.pc-img img{will-change:transform}
+
 /* ── MOBILE DISABLE ── */
 @media(max-width:768px){
   #constellation{display:none}
@@ -653,7 +685,12 @@ section{scroll-margin-top:80px}
 <body>
 
 <!-- LOADING SCREEN -->
-<div id="loader" aria-hidden="true"><span class="loader-init">LW</span></div>
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <span class="loader-init">LW</span>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
 
 <div id="progress-bar"></div>
 <canvas id="grain" aria-hidden="true"></canvas>
@@ -1079,277 +1116,579 @@ section{scroll-margin-top:80px}
   <span>Currently: Axiom v2.1</span>
 </div>
 
+<!-- SECTION INDICATOR -->
+<div id="sec-indicator" aria-hidden="true">
+  <span class="si-line"></span>
+  <span class="si-text"></span>
+</div>
+
 <script>
 /* ═══════════════════════════════════════════
-   LILLIAN WANG · ENHANCED SITE JS
+   LILLIAN WANG · ENHANCED SITE JS · ROUND 2
 ═══════════════════════════════════════════ */
 
-/* 1. LOADING SCREEN */
-const loader=document.getElementById('loader');
-setTimeout(()=>{if(loader)loader.classList.add('done')},800);
+window.addEventListener('DOMContentLoaded', () => {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* 2. SCROLL PROGRESS */
-const pb=document.getElementById('progress-bar');
-addEventListener('scroll',()=>{pb.style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%'},{passive:true});
-
-/* 3. GRAIN */
-(function(){
-  const c=document.getElementById('grain'),ctx=c.getContext('2d');let w,h,f=0;
-  function resize(){c.width=w=innerWidth;c.height=h=innerHeight}
-  function draw(){const img=ctx.createImageData(w,h),d=img.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=13}ctx.putImageData(img,0,0)}
-  function loop(){if(f++%3===0)draw();requestAnimationFrame(loop)}
-  resize();addEventListener('resize',resize);loop();
-})();
-
-/* 4. CURSOR GLOW */
-const glow=document.getElementById('cursor-glow');
-let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function lerp(){cx+=(mx-cx)*.08;cy+=(my-cy)*.08;glow.style.left=cx+'px';glow.style.top=cy+'px';requestAnimationFrame(lerp)})();
-// Color-shift glow on interactive elements
-document.querySelectorAll('a,button,.pc,.sb,.nc,.btn,.pl,.nav-cta').forEach(el=>{
-  el.addEventListener('mouseenter',()=>glow.classList.add('on-interactive'));
-  el.addEventListener('mouseleave',()=>glow.classList.remove('on-interactive'));
-});
-
-/* 5. CLICK RIPPLE */
-document.addEventListener('mousedown',e=>{
-  const r=document.createElement('div');
-  r.className='c-ripple';
-  r.style.cssText=`left:${e.clientX}px;top:${e.clientY}px`;
-  document.body.appendChild(r);
-  setTimeout(()=>r.remove(),600);
-});
-
-/* 6. NAV */
-const navEl=document.getElementById('nav');
-addEventListener('scroll',()=>navEl.classList.toggle('scrolled',scrollY>20),{passive:true});
-
-/* 7. REVEAL OBSERVER (all variants) */
-const obs=new IntersectionObserver(es=>es.forEach((e,i)=>{
-  if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*60);
-}),{threshold:.05,rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>obs.observe(el));
-
-/* 8. APPLY REVEAL VARIANTS TO ELEMENTS */
-document.querySelectorAll('.tl-row').forEach((row,i)=>row.classList.add(i%2===0?'reveal-left':'reveal-right'));
-document.querySelectorAll('.rs-card').forEach(c=>c.classList.add('reveal-right'));
-document.querySelectorAll('.nc').forEach(c=>c.classList.add('reveal-scale'));
-
-/* 9. WATERMARK PARALLAX */
-const wm=document.querySelector('.hero-watermark');
-if(wm)addEventListener('scroll',()=>{
-  wm.style.transform=`translateY(calc(-50% + ${scrollY*.15}px))`;
-},{passive:true});
-
-/* 10. MARQUEE */
-(function(){
-  const items=[
-    {t:"Applied Mathematics · Princeton '29",h:true},
-    {t:'ZERO Lab · Energy Systems Optimization',h:false},
-    {t:'Princeton Research Day 2026',h:false},
-    {t:'PROMYS · Boston University',h:false},
-    {t:'Smith Normal Form · JMM 2026',h:false},
-    {t:'4 open-source tools shipped',h:false},
-    {t:'238 commits · 中文-Learn',h:true},
-    {t:'MAT217 · Honors Linear Algebra',h:false},
-    {t:'Modeling the Future · 2nd Place',h:false},
-    {t:'Pokémon GO · Level 76',h:true},
-    {t:'2054-day Duolingo streak 🔥',h:false},
-    {t:'Ravenclaw · obviously',h:true},
-    {t:'avid birder',h:false},
-    {t:'Girardian Discourse Analysis',h:false},
-  ];
-  const track=document.getElementById('marquee-track');
-  [...items,...items].forEach(it=>{
-    const s=document.createElement('span');
-    s.className='marquee-item'+(it.h?' hl':'');
-    s.innerHTML=`${it.t}<span class="dot">◆</span>`;
-    track.appendChild(s);
-  });
-})();
-
-/* 11. MATH GLYPHS */
-['∫','∑','∂','∇','∞','π','φ','λ','ε','δ','Δ','∈','⊕','≡','∼','∀','∃','⟨','⟩','‖','ℝ','ℕ','⊂','∩','∪'].forEach(g=>{
-  const el=document.createElement('span');el.className='mg';el.textContent=g;
-  const sz=14+Math.random()*24;
-  el.style.cssText=`left:${4+Math.random()*92}%;bottom:-80px;font-size:${sz}px;animation-duration:${22+Math.random()*28}s;animation-delay:${Math.random()*-30}s;opacity:0`;
-  document.getElementById('mathbg').appendChild(el);
-});
-
-/* 12. TYPEWRITER */
-(function(){
-  const phrases=[
-    'applied.math.phd_track()',
-    'build(tools_I_wish_existed)',
-    'energy_systems.optimize()',
-    'pokemon_go.level = 76',
-    'duolingo_streak = 2054',
-    'pursuit_of_proof.continue()',
-  ];
-  let pi=0,ci=0,del=false,wait=0;
-  const el=document.getElementById('kicker-text');
-  function tick(){
-    const p=phrases[pi];
-    if(del){ci--;el.textContent=p.slice(0,ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;wait=18}}
-    else{ci++;el.textContent=p.slice(0,ci);if(ci===p.length){del=true;wait=52}}
-    if(wait>0){wait--;setTimeout(tick,80);return}
-    setTimeout(tick,del?40:55);
+  /* ── REDUCED MOTION: show everything immediately ── */
+  if (prefersReducedMotion) {
+    document.querySelectorAll('.fu,.reveal,.reveal-left,.reveal-right,.reveal-scale')
+      .forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+    const loaderEl = document.getElementById('loader');
+    if (loaderEl) loaderEl.style.display = 'none';
   }
-  setTimeout(tick,1000);
-})();
 
-/* 13. STAT COUNTERS (elastic overshoot) */
-function animCount(el,target,suf){
-  const start=performance.now(),dur=1600;
-  (function step(now){
-    const p=Math.min((now-start)/dur,1);
-    // Cubic ease-out with brief color flash at end
-    const ease=1-Math.pow(1-p,3);
-    const v=Math.round(ease*target);
-    el.innerHTML=v+(suf?('<sup>'+suf+'</sup>'):'');
-    if(p<1){requestAnimationFrame(step)}
-    else{
-      el.innerHTML=target+(suf?('<sup>'+suf+'</sup>'):'');
-      el.style.transition='color .4s';
-      el.style.color='var(--r3)';
-      setTimeout(()=>{el.style.color='';},420);
+  /* ── 3. GRAIN ── */
+  (function(){
+    const c=document.getElementById('grain'),ctx=c.getContext('2d');let w,h,f=0;
+    function resize(){c.width=w=innerWidth;c.height=h=innerHeight}
+    function draw(){const img=ctx.createImageData(w,h),d=img.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=13}ctx.putImageData(img,0,0)}
+    function loop(){if(f++%3===0)draw();requestAnimationFrame(loop)}
+    resize();addEventListener('resize',resize);loop();
+  })();
+
+  /* ── 4. CURSOR GLOW ── */
+  const glow=document.getElementById('cursor-glow');
+  let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function lerp(){cx+=(mx-cx)*.08;cy+=(my-cy)*.08;glow.style.left=cx+'px';glow.style.top=cy+'px';requestAnimationFrame(lerp)})();
+  document.querySelectorAll('a,button,.pc,.sb,.nc,.btn,.pl,.nav-cta').forEach(el=>{
+    el.addEventListener('mouseenter',()=>glow.classList.add('on-interactive'));
+    el.addEventListener('mouseleave',()=>glow.classList.remove('on-interactive'));
+  });
+
+  /* ── 5. CLICK RIPPLE ── */
+  document.addEventListener('mousedown',e=>{
+    const r=document.createElement('div');
+    r.className='c-ripple';
+    r.style.cssText=`left:${e.clientX}px;top:${e.clientY}px`;
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),600);
+  });
+
+  /* ── 8. APPLY REVEAL VARIANT CLASSES ── */
+  document.querySelectorAll('.tl-row').forEach((row,i)=>row.classList.add(i%2===0?'reveal-left':'reveal-right'));
+  document.querySelectorAll('.rs-card').forEach(c=>c.classList.add('reveal-right'));
+  document.querySelectorAll('.nc').forEach(c=>c.classList.add('reveal-scale'));
+
+  /* ── 10. MARQUEE ── */
+  (function(){
+    const items=[
+      {t:"Applied Mathematics · Princeton '29",h:true},
+      {t:'ZERO Lab · Energy Systems Optimization',h:false},
+      {t:'Princeton Research Day 2026',h:false},
+      {t:'PROMYS · Boston University',h:false},
+      {t:'Smith Normal Form · JMM 2026',h:false},
+      {t:'4 open-source tools shipped',h:false},
+      {t:'238 commits · 中文-Learn',h:true},
+      {t:'MAT217 · Honors Linear Algebra',h:false},
+      {t:'Modeling the Future · 2nd Place',h:false},
+      {t:'Pokémon GO · Level 76',h:true},
+      {t:'2054-day Duolingo streak 🔥',h:false},
+      {t:'Ravenclaw · obviously',h:true},
+      {t:'avid birder',h:false},
+      {t:'Girardian Discourse Analysis',h:false},
+    ];
+    const track=document.getElementById('marquee-track');
+    [...items,...items].forEach(it=>{
+      const s=document.createElement('span');
+      s.className='marquee-item'+(it.h?' hl':'');
+      s.innerHTML=`${it.t}<span class="dot">◆</span>`;
+      track.appendChild(s);
+    });
+  })();
+
+  /* ── 11. MATH GLYPHS ── */
+  ['∫','∑','∂','∇','∞','π','φ','λ','ε','δ','Δ','∈','⊕','≡','∼','∀','∃','⟨','⟩','‖','ℝ','ℕ','⊂','∩','∪'].forEach(g=>{
+    const el=document.createElement('span');el.className='mg';el.textContent=g;
+    const sz=14+Math.random()*24;
+    el.style.cssText=`left:${4+Math.random()*92}%;bottom:-80px;font-size:${sz}px;animation-duration:${22+Math.random()*28}s;animation-delay:${Math.random()*-30}s;opacity:0`;
+    document.getElementById('mathbg').appendChild(el);
+  });
+
+  /* ── 12. TYPEWRITER ── */
+  (function(){
+    const phrases=[
+      'applied.math.phd_track()',
+      'build(tools_I_wish_existed)',
+      'energy_systems.optimize()',
+      'pokemon_go.level = 76',
+      'duolingo_streak = 2054',
+      'pursuit_of_proof.continue()',
+    ];
+    let pi=0,ci=0,del=false,wait=0;
+    const el=document.getElementById('kicker-text');
+    function tick(){
+      const p=phrases[pi];
+      if(del){ci--;el.textContent=p.slice(0,ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;wait=18}}
+      else{ci++;el.textContent=p.slice(0,ci);if(ci===p.length){del=true;wait=52}}
+      if(wait>0){wait--;setTimeout(tick,80);return}
+      setTimeout(tick,del?40:55);
     }
-  })(start);
-}
-const sbObs=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting)return;
-    const n=e.target.querySelector('.sb-n');
-    if(!n||n.dataset.counted)return;
-    n.dataset.counted='1';
-    const t=n.dataset.target,s=n.dataset.suf||'';
-    if(t&&t!=='Infinity')animCount(n,+t,s);
-  });
-},{threshold:.3});
-document.querySelectorAll('.sb').forEach(el=>sbObs.observe(el));
+    setTimeout(tick,1800);
+  })();
 
-/* 14. BENTO CARD TILT */
-if(innerWidth>768){
-  document.querySelectorAll('.sb').forEach(sb=>{
-    sb.addEventListener('mousemove',e=>{
-      const r=sb.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5;
-      const y=(e.clientY-r.top)/r.height-.5;
-      sb.style.transform=`perspective(480px) rotateX(${y*-5}deg) rotateY(${x*5}deg) scale(1.02)`;
-    });
-    sb.addEventListener('mouseleave',()=>{sb.style.transform='';});
-  });
-}
-
-/* 15. MAGNETIC PROJECT CARDS */
-document.querySelectorAll('.pc').forEach(c=>{
-  c.addEventListener('mousemove',e=>{
-    const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-    c.style.transform='translateY(-6px) rotateX('+(y*-4)+'deg) rotateY('+(x*4)+'deg)';
-  });
-  c.addEventListener('mouseleave',()=>c.style.transform='');
-});
-
-/* 16. GLASSMORPHISM OVERLAY (injected via JS) */
-document.querySelectorAll('.pc').forEach(pc=>{
-  const imgDiv=pc.querySelector('.pc-img');
-  if(!imgDiv)return;
-  const pills=Array.from(pc.querySelectorAll('.pp')).map(p=>p.textContent.trim());
-  const gl=document.createElement('div');
-  gl.className='pc-glass';
-  if(pills.length){
-    const gp=document.createElement('div');gp.className='glass-pills';
-    pills.forEach(t=>{
-      const s=document.createElement('span');s.className='glass-pill';s.textContent=t;
-      gp.appendChild(s);
-    });
-    gl.appendChild(gp);
+  /* ── 13. STAT COUNTERS ── */
+  function animCount(el,target,suf){
+    const start=performance.now(),dur=1600;
+    (function step(now){
+      const p=Math.min((now-start)/dur,1);
+      const ease=1-Math.pow(1-p,3);
+      const v=Math.round(ease*target);
+      el.innerHTML=v+(suf?('<sup>'+suf+'</sup>'):'');
+      if(p<1){requestAnimationFrame(step)}
+      else{
+        el.innerHTML=target+(suf?('<sup>'+suf+'</sup>'):'');
+        el.style.transition='color .4s';
+        el.style.color='var(--r3)';
+        setTimeout(()=>{
+          el.style.color='';
+          // GSAP scale bounce after counter ends (Phase 7.5)
+          if(typeof gsap!=='undefined') gsap.fromTo(el,{scale:1.15},{scale:1,duration:.4,ease:'elastic.out(1,.5)'});
+        },420);
+      }
+    })(start);
   }
-  imgDiv.appendChild(gl);
-});
-
-/* 17. IMAGE BLUR-UP */
-document.querySelectorAll('.pc-img img').forEach(img=>{
-  if(img.complete&&img.naturalWidth>0){img.classList.add('img-loaded')}
-  else{img.addEventListener('load',()=>img.classList.add('img-loaded'),{once:true})}
-});
-
-/* 18. FUN PILL STAGGER ENTRANCE */
-document.querySelectorAll('.fun-pill').forEach((pill,i)=>{
-  pill.style.opacity='0';
-  setTimeout(()=>{pill.style.opacity='';pill.classList.add('drop');},900+i*85);
-});
-
-/* 19. SECTION DIAMOND DIVIDERS */
-document.querySelectorAll('.sec+.sec').forEach(sec=>{
-  const d=document.createElement('div');d.className='sec-div';
-  sec.insertBefore(d,sec.firstChild);
-});
-
-/* 20. CONSTELLATION CANVAS */
-(function(){
-  const canvas=document.getElementById('constellation');
-  if(!canvas||innerWidth<=768)return;
-  const ctx=canvas.getContext('2d');
-  const hero=document.getElementById('hero');
-  let W,H,dots=[],frame=0,mouseX=-999,mouseY=-999;
-
-  function resize(){
-    W=canvas.width=hero.offsetWidth;
-    H=canvas.height=hero.offsetHeight;
-  }
-  function mkDot(){
-    return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.38,vy:(Math.random()-.5)*.38,r:.8+Math.random()*.9};
-  }
-  hero.addEventListener('mousemove',e=>{
-    const r=hero.getBoundingClientRect();mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
-  },{passive:true});
-  hero.addEventListener('mouseleave',()=>{mouseX=-999;mouseY=-999;});
-
-  resize();addEventListener('resize',resize);
-  for(let i=0;i<40;i++)dots.push(mkDot());
-
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    dots.forEach(d=>{
-      const dx=d.x-mouseX,dy=d.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<100&&dist>0){const f=.45*(100-dist)/100;d.vx+=dx/dist*f*.1;d.vy+=dy/dist*f*.1;}
-      d.vx*=.97;d.vy*=.97;
-      d.x+=d.vx;d.y+=d.vy;
-      if(d.x<-2)d.x=W+2;else if(d.x>W+2)d.x=-2;
-      if(d.y<-2)d.y=H+2;else if(d.y>H+2)d.y=-2;
+  const sbObs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const n=e.target.querySelector('.sb-n');
+      if(!n||n.dataset.counted)return;
+      n.dataset.counted='1';
+      const t=n.dataset.target,s=n.dataset.suf||'';
+      if(t&&t!=='Infinity')animCount(n,+t,s);
     });
-    for(let i=0;i<dots.length;i++){
-      for(let j=i+1;j<dots.length;j++){
-        const dx=dots[i].x-dots[j].x,dy=dots[i].y-dots[j].y;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<120){
-          ctx.strokeStyle=`rgba(185,28,28,${.065*(1-dist/120)})`;
-          ctx.lineWidth=.7;
-          ctx.beginPath();ctx.moveTo(dots[i].x,dots[i].y);ctx.lineTo(dots[j].x,dots[j].y);ctx.stroke();
+  },{threshold:.3});
+  document.querySelectorAll('.sb').forEach(el=>sbObs.observe(el));
+
+  /* ── 14. BENTO CARD TILT ── */
+  if(innerWidth>768){
+    document.querySelectorAll('.sb').forEach(sb=>{
+      sb.addEventListener('mousemove',e=>{
+        const r=sb.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-.5;
+        const y=(e.clientY-r.top)/r.height-.5;
+        sb.style.transform=`perspective(480px) rotateX(${y*-5}deg) rotateY(${x*5}deg) scale(1.02)`;
+      });
+      sb.addEventListener('mouseleave',()=>{sb.style.transform='';});
+    });
+  }
+
+  /* ── 15. MAGNETIC PROJECT CARDS ── */
+  document.querySelectorAll('.pc').forEach(c=>{
+    c.addEventListener('mousemove',e=>{
+      const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      c.style.transform='translateY(-6px) rotateX('+(y*-4)+'deg) rotateY('+(x*4)+'deg)';
+    });
+    c.addEventListener('mouseleave',()=>c.style.transform='');
+  });
+
+  /* ── 16. GLASSMORPHISM OVERLAY ── */
+  document.querySelectorAll('.pc').forEach(pc=>{
+    const imgDiv=pc.querySelector('.pc-img');
+    if(!imgDiv)return;
+    const pills=Array.from(pc.querySelectorAll('.pp')).map(p=>p.textContent.trim());
+    const gl=document.createElement('div');
+    gl.className='pc-glass';
+    if(pills.length){
+      const gp=document.createElement('div');gp.className='glass-pills';
+      pills.forEach(t=>{
+        const s=document.createElement('span');s.className='glass-pill';s.textContent=t;
+        gp.appendChild(s);
+      });
+      gl.appendChild(gp);
+    }
+    imgDiv.appendChild(gl);
+  });
+
+  /* ── 17. IMAGE BLUR-UP ── */
+  document.querySelectorAll('.pc-img img').forEach(img=>{
+    if(img.complete&&img.naturalWidth>0){img.classList.add('img-loaded')}
+    else{img.addEventListener('load',()=>img.classList.add('img-loaded'),{once:true})}
+  });
+
+  /* ── 18. FUN PILL STAGGER ENTRANCE ── */
+  document.querySelectorAll('.fun-pill').forEach((pill,i)=>{
+    pill.style.opacity='0';
+    setTimeout(()=>{pill.style.opacity='';pill.classList.add('drop');},1400+i*85);
+  });
+
+  /* ── 19. SECTION DIAMOND DIVIDERS ── */
+  document.querySelectorAll('.sec+.sec').forEach(sec=>{
+    const d=document.createElement('div');d.className='sec-div';
+    sec.insertBefore(d,sec.firstChild);
+  });
+
+  /* ── 20. CONSTELLATION CANVAS ── */
+  (function(){
+    const canvas=document.getElementById('constellation');
+    if(!canvas||innerWidth<=768)return;
+    const ctx=canvas.getContext('2d');
+    const hero=document.getElementById('hero');
+    let W,H,dots=[],frame=0,mouseX=-999,mouseY=-999;
+    function resize(){W=canvas.width=hero.offsetWidth;H=canvas.height=hero.offsetHeight;}
+    function mkDot(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.38,vy:(Math.random()-.5)*.38,r:.8+Math.random()*.9};}
+    hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;},{passive:true});
+    hero.addEventListener('mouseleave',()=>{mouseX=-999;mouseY=-999;});
+    resize();addEventListener('resize',resize);
+    for(let i=0;i<40;i++)dots.push(mkDot());
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      dots.forEach(d=>{
+        const dx=d.x-mouseX,dy=d.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100&&dist>0){const f=.45*(100-dist)/100;d.vx+=dx/dist*f*.1;d.vy+=dy/dist*f*.1;}
+        d.vx*=.97;d.vy*=.97;
+        d.x+=d.vx;d.y+=d.vy;
+        if(d.x<-2)d.x=W+2;else if(d.x>W+2)d.x=-2;
+        if(d.y<-2)d.y=H+2;else if(d.y>H+2)d.y=-2;
+      });
+      for(let i=0;i<dots.length;i++){
+        for(let j=i+1;j<dots.length;j++){
+          const dx=dots[i].x-dots[j].x,dy=dots[i].y-dots[j].y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){
+            ctx.strokeStyle=`rgba(185,28,28,${.065*(1-dist/120)})`;
+            ctx.lineWidth=.7;
+            ctx.beginPath();ctx.moveTo(dots[i].x,dots[i].y);ctx.lineTo(dots[j].x,dots[j].y);ctx.stroke();
+          }
         }
       }
+      dots.forEach(d=>{
+        ctx.fillStyle='rgba(185,28,28,.16)';
+        ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fill();
+      });
     }
-    dots.forEach(d=>{
-      ctx.fillStyle='rgba(185,28,28,.16)';
-      ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fill();
+    (function loop(){if(frame++%2===0)draw();requestAnimationFrame(loop);})();
+  })();
+
+  /* ── 21. STATUS WIDGET ── */
+  const sw=document.getElementById('status-widget');
+  if(sw){
+    setTimeout(()=>sw.classList.add('visible'),2800);
+    sw.addEventListener('click',()=>{
+      sw.style.transition='transform .4s var(--spring),opacity .3s';
+      sw.style.transform='translateX(calc(100% + 48px))';
+      sw.style.opacity='0';
+      setTimeout(()=>sw.remove(),450);
     });
   }
-  (function loop(){if(frame++%2===0)draw();requestAnimationFrame(loop);})();
-})();
 
-/* 21. STATUS WIDGET */
-const sw=document.getElementById('status-widget');
-if(sw){
-  setTimeout(()=>sw.classList.add('visible'),2200);
-  sw.addEventListener('click',()=>{
-    sw.style.transition='transform .4s var(--spring),opacity .3s';
-    sw.style.transform='translateX(calc(100% + 48px))';
-    sw.style.opacity='0';
-    setTimeout(()=>sw.remove(),450);
-  });
-}
+  /* ════════════════════════════════════
+     GSAP-POWERED FEATURES
+     (waits for GSAP to load via defer)
+  ════════════════════════════════════ */
+  function initGSAP() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── PHASE 1: LENIS SMOOTH SCROLL ── */
+    let lenis = null;
+    if (!prefersReducedMotion && innerWidth > 768) {
+      lenis = new Lenis({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        smoothWheel: true,
+      });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      /* Wire nav anchor links to Lenis */
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target) lenis.scrollTo(target, { offset: -70 });
+        });
+      });
+    }
+
+    /* ── PHASE 4: CINEMATIC LOADER SEQUENCE ── */
+    const loader = document.getElementById('loader');
+    if (loader && !prefersReducedMotion) {
+      const loaderTL = gsap.timeline();
+      loaderTL
+        .to('.loader-fill', { width: '100%', duration: 0.7, ease: 'power2.inOut' })
+        .to('.loader-init', { scale: 1.12, duration: 0.25, ease: 'power2.in' })
+        .to('.loader-init', { scale: 0.9, opacity: 0, duration: 0.3, ease: 'power2.in' })
+        .to('.loader-bar', { opacity: 0, duration: 0.2 }, '<0.1')
+        .to(loader, {
+          yPercent: -100,
+          duration: 0.6,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            loader.style.display = 'none';
+            heroEntrance();
+          }
+        });
+    } else {
+      if (loader) loader.style.display = 'none';
+      heroEntrance();
+    }
+
+    /* ── HERO ENTRANCE ── */
+    function heroEntrance() {
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.fu').forEach(el => { el.style.opacity = '1'; });
+        return;
+      }
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl
+        .fromTo('.badge-row',  { opacity:0, y:20 }, { opacity:1, y:0, duration:0.5 })
+        .fromTo('.hero-name',  { opacity:0, y:30 }, { opacity:1, y:0, duration:0.65 }, '-=0.2')
+        .fromTo('.hero-kicker',{ opacity:0, y:20 }, { opacity:1, y:0, duration:0.5  }, '-=0.3')
+        .fromTo('.hero-bio',   { opacity:0, y:20 }, { opacity:1, y:0, duration:0.5  }, '-=0.25')
+        .fromTo('.fun-row',    { opacity:0, y:15 }, { opacity:1, y:0, duration:0.4  }, '-=0.2')
+        .fromTo('.hero-ctas',  { opacity:0, y:15 }, { opacity:1, y:0, duration:0.4  }, '-=0.15')
+        .fromTo('.chips',      { opacity:0, y:15 }, { opacity:1, y:0, duration:0.4  }, '-=0.1')
+        .fromTo('.hero-r',     { opacity:0, x:40  }, { opacity:1, x:0, duration:0.7 }, '-=0.5')
+        .fromTo('.hero-foot',  { opacity:0        }, { opacity:1,      duration:0.5  }, '-=0.3');
+    }
+
+    /* ── PHASE 2: GSAP SCROLL REVEALS ── */
+    if (!prefersReducedMotion) {
+      gsap.utils.toArray('.reveal').forEach(el => {
+        gsap.fromTo(el,
+          { opacity:0, y:30 },
+          {
+            opacity:1, y:0, duration:0.8, ease:'power3.out',
+            scrollTrigger: { trigger:el, start:'top 88%', toggleActions:'play none none none' },
+            delay: el.classList.contains('r1') ? 0.07
+                 : el.classList.contains('r2') ? 0.14
+                 : el.classList.contains('r3') ? 0.21
+                 : el.classList.contains('r4') ? 0.28 : 0,
+          }
+        );
+      });
+
+      gsap.utils.toArray('.reveal-left').forEach(el => {
+        gsap.fromTo(el,
+          { opacity:0, x:-40 },
+          { opacity:1, x:0, duration:0.75, ease:'power3.out',
+            scrollTrigger: { trigger:el, start:'top 88%' } }
+        );
+      });
+
+      gsap.utils.toArray('.reveal-right').forEach(el => {
+        gsap.fromTo(el,
+          { opacity:0, x:40 },
+          { opacity:1, x:0, duration:0.75, ease:'power3.out',
+            scrollTrigger: { trigger:el, start:'top 88%' } }
+        );
+      });
+
+      gsap.utils.toArray('.reveal-scale').forEach(el => {
+        gsap.fromTo(el,
+          { opacity:0, scale:0.88 },
+          { opacity:1, scale:1, duration:0.7, ease:'back.out(1.4)',
+            scrollTrigger: { trigger:el, start:'top 88%' } }
+        );
+      });
+
+      /* Section heading stagger */
+      document.querySelectorAll('.sec').forEach(sec => {
+        const h = sec.querySelector('h2');
+        const d = sec.querySelector('.sec-desc');
+        const e = sec.querySelector('.eyebrow');
+        const els = [e, h, d].filter(Boolean);
+        if (els.length) {
+          gsap.fromTo(els,
+            { opacity:0, y:24 },
+            {
+              opacity:1, y:0, duration:0.7, ease:'power3.out', stagger:0.1,
+              scrollTrigger: { trigger:sec, start:'top 80%' },
+            }
+          );
+        }
+      });
+
+      /* ── PHASE 3: PARALLAX ── */
+      gsap.to('.hero-bg', {
+        yPercent:18, ease:'none',
+        scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8 }
+      });
+      gsap.to('#constellation', {
+        yPercent:12, ease:'none',
+        scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:0.6 }
+      });
+      gsap.to('#mathbg', {
+        yPercent:-8, ease:'none',
+        scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:1 }
+      });
+      if (document.querySelector('.hero-watermark')) {
+        gsap.to('.hero-watermark', {
+          yPercent:25, ease:'none',
+          scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:1.2 }
+        });
+      }
+
+      /* Project card image parallax */
+      document.querySelectorAll('.pc-img img').forEach(img => {
+        gsap.to(img, {
+          yPercent:-8, ease:'none',
+          scrollTrigger: {
+            trigger: img.closest('.pc'),
+            start:'top bottom', end:'bottom top', scrub:0.5,
+          }
+        });
+      });
+
+      /* Section index text parallax */
+      document.querySelectorAll('.sec-index').forEach(idx => {
+        gsap.to(idx, {
+          yPercent:-30, ease:'none',
+          scrollTrigger: {
+            trigger: idx.closest('.sec'),
+            start:'top bottom', end:'bottom top', scrub:0.8,
+          }
+        });
+      });
+
+      /* ── PHASE 5: SCROLL PROGRESS BAR ── */
+      gsap.to('#progress-bar', {
+        width:'100%', ease:'none',
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start:'top top', end:'bottom bottom', scrub:0.3,
+        }
+      });
+
+      /* ── PHASE 5: SECTION INDICATOR ── */
+      const secIndicator = document.getElementById('sec-indicator');
+      const siText = secIndicator ? secIndicator.querySelector('.si-text') : null;
+
+      document.querySelectorAll('.sec').forEach(sec => {
+        ScrollTrigger.create({
+          trigger: sec,
+          start:'top 50%', end:'bottom 50%',
+          onEnter: () => updateSecIndicator(sec),
+          onEnterBack: () => updateSecIndicator(sec),
+        });
+      });
+
+      function updateSecIndicator(sec) {
+        if (!secIndicator || !siText) return;
+        const label = sec.querySelector('.eyebrow')?.textContent || sec.id || '';
+        siText.textContent = label;
+        secIndicator.classList.add('visible');
+      }
+
+      ScrollTrigger.create({
+        trigger:'#hero',
+        start:'top top', end:'bottom 50%',
+        onEnter: () => secIndicator?.classList.remove('visible'),
+        onEnterBack: () => secIndicator?.classList.remove('visible'),
+      });
+
+      /* ── PHASE 7: MICRO-INTERACTIONS ── */
+
+      /* Magnetic buttons */
+      if (innerWidth > 768) {
+        document.querySelectorAll('.btn, .cta-btn, .nav-cta').forEach(btn => {
+          btn.addEventListener('mousemove', (e) => {
+            const r = btn.getBoundingClientRect();
+            const x = e.clientX - r.left - r.width / 2;
+            const y = e.clientY - r.top - r.height / 2;
+            gsap.to(btn, { x: x * 0.15, y: y * 0.15, duration:0.3, ease:'power2.out' });
+          });
+          btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x:0, y:0, duration:0.5, ease:'elastic.out(1, 0.4)' });
+          });
+        });
+      }
+
+      /* Project card glow */
+      document.querySelectorAll('.pc').forEach(pc => {
+        const glowEl = document.createElement('div');
+        glowEl.className = 'pc-glow';
+        pc.insertBefore(glowEl, pc.firstChild);
+        pc.addEventListener('mousemove', (e) => {
+          const r = pc.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          glowEl.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(185,28,28,.06), transparent 40%)`;
+        });
+      });
+
+      /* Timeline dot pulse */
+      document.querySelectorAll('.tl-row').forEach(row => {
+        ScrollTrigger.create({
+          trigger: row,
+          start:'top 80%',
+          onEnter: () => {
+            const dot = row.querySelector('.tl-dot');
+            if (dot) {
+              gsap.fromTo(dot,
+                { scale:0.5, backgroundColor:'var(--bg4)' },
+                {
+                  scale:1, backgroundColor:'var(--r)',
+                  duration:0.5, ease:'back.out(2.5)',
+                  onComplete: () => {
+                    gsap.to(dot, { backgroundColor:'var(--bg4)', duration:1.2, ease:'power1.out' });
+                  }
+                }
+              );
+            }
+          },
+          once: true,
+        });
+      });
+
+      /* CTA strip entrance */
+      gsap.fromTo('.cta-strip',
+        { opacity:0, y:40, scale:0.97 },
+        {
+          opacity:1, y:0, scale:1, duration:0.8, ease:'power3.out',
+          scrollTrigger: { trigger:'.cta-strip', start:'top 85%' }
+        }
+      );
+
+      /* ── PHASE 8: NAV SHRINK ── */
+      const navEl = document.getElementById('nav');
+      ScrollTrigger.create({
+        start: 20,
+        onUpdate: (self) => {
+          if (self.scroll() > 20) navEl.classList.add('scrolled');
+          else navEl.classList.remove('scrolled');
+        }
+      });
+    } // end !prefersReducedMotion
+
+  } // end initGSAP
+
+  /* ── Wait for GSAP (defer scripts) ── */
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Lenis !== 'undefined') {
+    initGSAP();
+  } else {
+    const check = setInterval(() => {
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Lenis !== 'undefined') {
+        clearInterval(check);
+        initGSAP();
+      }
+    }, 50);
+    /* Safety timeout — fallback after 3s if CDN fails */
+    setTimeout(() => {
+      clearInterval(check);
+      if (typeof gsap === 'undefined') {
+        document.querySelectorAll('.fu,.reveal,.reveal-left,.reveal-right,.reveal-scale')
+          .forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+        const loaderFallback = document.getElementById('loader');
+        if (loaderFallback) loaderFallback.style.display = 'none';
+        /* Fallback nav */
+        const navEl = document.getElementById('nav');
+        if (navEl) addEventListener('scroll',()=>navEl.classList.toggle('scrolled',scrollY>20),{passive:true});
+        /* Fallback scroll progress */
+        const pb = document.getElementById('progress-bar');
+        if (pb) addEventListener('scroll',()=>{pb.style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%'},{passive:true});
+      }
+    }, 3000);
+  }
+
+  /* ── 21. STATUS WIDGET ── (already in non-GSAP block above, keeping reference) */
+
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
