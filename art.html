@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Art — Lillian Wang</title>
+<meta name="description" content="Visual art by Lillian Wang — Scholastic Gold Key recipient, Illinois State Champion. Specializing in colored pencil and realistic drawing."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --r:#B91C1C; --r2:#DC2626; --r3:#EF4444; --r4:#FCA5A5;
+  --rdim:rgba(185,28,28,.07); --rlin:rgba(185,28,28,.2);
+  --rglow:rgba(185,28,28,.22); --rdark:#7F1D1D;
+  --ink:#0C0A09; --i2:#1C1917; --i3:#57534E; --i4:#A8A29E;
+  --bg:#FAFAF9; --bg2:#F5F5F4; --bg3:#E7E5E4;
+  --bdr:rgba(12,10,9,.06); --bdr2:rgba(12,10,9,.11);
+  --display:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --spring:cubic-bezier(.22,1,.36,1);
+  --bounce:cubic-bezier(.34,1.6,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* GRAIN */
+body::before{content:'';position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.25;mix-blend-mode:lighten;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px}
+
+/* CURSOR GLOW */
+#cursor-glow{position:fixed;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(185,28,28,.05) 0%,transparent 65%);top:0;left:0;margin-left:-250px;margin-top:-250px;will-change:transform}
+
+/* PAGE PROGRESS */
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--rdark),var(--r),var(--r3));z-index:9998;box-shadow:0 0 10px var(--rglow);transition:width .1s linear}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;transition:background .5s,box-shadow .5s}
+nav.scrolled{background:rgba(250,250,249,.94);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);box-shadow:0 1px 0 var(--bdr)}
+.nav-inner{max-width:1240px;margin:0 auto;padding:0 52px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-name{font-family:var(--display);font-style:italic;font-size:1.05rem;color:var(--ink);font-weight:400;letter-spacing:-.01em;transition:color .2s}
+.nav-logo-name b{font-style:normal;color:var(--r);font-weight:700}
+.nav-logo:hover .nav-logo-name{color:var(--r)}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{font-size:.72rem;font-weight:500;color:var(--i3);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:4px;transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--ink);background:var(--bg2)}
+.nav-links a.active{color:var(--r);background:var(--rdim)}
+.nav-back{font-family:var(--mono);font-size:.66rem;font-weight:500;padding:7px 14px;border-radius:4px;background:transparent;color:var(--i3);text-decoration:none;letter-spacing:.03em;border:1.5px solid var(--bdr2);transition:all .2s var(--spring)}
+.nav-back:hover{color:var(--r);border-color:var(--rlin);background:var(--rdim);transform:translateX(-2px)}
+
+/* HERO */
+.art-hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 52px 88px;position:relative;overflow:hidden;background:var(--ink)}
+.hero-mesh{position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 85% 35%,rgba(185,28,28,.18) 0%,transparent 55%),radial-gradient(ellipse 70% 90% at 8% 75%,rgba(127,29,29,.15) 0%,transparent 50%),radial-gradient(ellipse 50% 60% at 50% 10%,rgba(220,38,38,.07) 0%,transparent 50%);animation:meshDrift 22s ease-in-out infinite alternate}
+@keyframes meshDrift{0%{transform:scale(1) translate(0,0)}33%{transform:scale(1.04) translate(-1%,1.5%)}66%{transform:scale(.97) translate(2%,-1%)}100%{transform:scale(1.03) translate(-1.5%,2%)}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(250,250,249,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(250,250,249,.03) 1px,transparent 1px);background-size:80px 80px}
+.hero-watermark{position:absolute;right:-60px;top:50%;transform:translateY(-52%);font-family:var(--display);font-weight:700;font-style:italic;font-size:30vw;color:var(--r);opacity:.025;line-height:1;pointer-events:none;user-select:none;white-space:nowrap;letter-spacing:-.06em}
+.hero-lines{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-lines svg{position:absolute;top:0;left:0;width:100%;height:100%}
+
+.art-hero-content{position:relative;z-index:2;max-width:960px}
+
+.art-hero-eyebrow{font-family:var(--mono);font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--r3);margin-bottom:24px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeSlideUp .9s .3s var(--spring) forwards}
+.art-hero-eyebrow::before{content:'';width:40px;height:1px;background:linear-gradient(90deg,var(--r3),transparent)}
+.art-hero-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(239,68,68,.2),transparent);max-width:200px}
+
+.art-hero-title{font-family:var(--display);font-size:clamp(4.2rem,10vw,10.5rem);font-weight:300;line-height:.88;letter-spacing:-.045em;color:rgba(250,250,249,.95);margin-bottom:18px}
+.art-hero-title .line1{display:block;opacity:0;animation:fadeSlideUp .95s .5s var(--spring) forwards}
+.art-hero-title em{font-style:italic;color:var(--r3);display:block;opacity:0;animation:fadeSlideUp .95s .7s var(--spring) forwards;position:relative}
+.art-hero-title em::after{content:'';position:absolute;bottom:-6px;left:0;height:2px;width:100%;background:linear-gradient(90deg,var(--r),var(--r3),transparent);border-radius:1px;transform:scaleX(0);transform-origin:left;animation:drawLine 1.1s 1.4s var(--spring) forwards}
+@keyframes drawLine{to{transform:scaleX(1)}}
+
+.art-hero-sub{font-family:var(--display);font-size:clamp(1rem,2vw,1.45rem);color:rgba(250,250,249,.4);font-style:italic;font-weight:300;letter-spacing:-.01em;margin-bottom:44px;max-width:640px;line-height:1.65;opacity:0;animation:fadeSlideUp .9s .9s var(--spring) forwards}
+
+.art-awards{display:flex;flex-wrap:wrap;gap:9px}
+.art-award{display:inline-flex;align-items:center;gap:8px;padding:7px 15px 7px 11px;border-radius:5px;font-family:var(--mono);font-size:.59rem;letter-spacing:.07em;text-transform:uppercase;border:1px solid;backdrop-filter:blur(8px);opacity:0;animation:fadeSlideUp .7s var(--spring) forwards;transition:transform .2s var(--bounce),box-shadow .2s;cursor:default}
+.art-award:hover{transform:translateY(-2px) scale(1.04)}
+.art-award:nth-child(1){animation-delay:1.05s}
+.art-award:nth-child(2){animation-delay:1.15s}
+.art-award:nth-child(3){animation-delay:1.25s}
+.art-award:nth-child(4){animation-delay:1.35s}
+.art-award.gold{background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.32);color:#FBD24C}
+.art-award.gold:hover{box-shadow:0 6px 24px rgba(251,191,36,.18)}
+.art-award.silver{background:rgba(148,163,184,.09);border-color:rgba(148,163,184,.32);color:#CBD5E1}
+.art-award.silver:hover{box-shadow:0 6px 24px rgba(148,163,184,.18)}
+.art-award.hm{background:rgba(185,28,28,.12);border-color:rgba(185,28,28,.32);color:var(--r4)}
+.art-award.hm:hover{box-shadow:0 6px 24px rgba(185,28,28,.18)}
+.art-award.state{background:rgba(34,197,94,.09);border-color:rgba(34,197,94,.32);color:#4ADE80;animation:statePulse 3s 2s ease-in-out infinite,fadeSlideUp .7s 1.35s var(--spring) forwards}
+@keyframes statePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}50%{box-shadow:0 0 0 8px rgba(34,197,94,.06)}}
+.art-award.state:hover{box-shadow:0 6px 24px rgba(34,197,94,.18)}
+.award-icon{font-size:.88rem}
+
+.scroll-cue{position:absolute;bottom:40px;right:52px;display:flex;flex-direction:column;align-items:center;gap:9px;opacity:0;animation:fadeIn 1s 1.8s ease forwards;z-index:2}
+.scroll-cue span{font-family:var(--mono);font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(250,250,249,.35);writing-mode:vertical-rl;transform:rotate(180deg)}
+.scroll-dot{width:5px;height:5px;border-radius:50%;background:var(--r3);animation:scrollBounce 2.2s ease-in-out infinite}
+@keyframes scrollBounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(12px);opacity:1}}
+
+/* STATS BAR */
+.stats-bar{background:var(--ink);border-top:1px solid rgba(250,250,249,.06);border-bottom:1px solid rgba(250,250,249,.06);padding:0 52px;overflow:hidden}
+.stats-bar-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:36px 32px;border-right:1px solid rgba(250,250,249,.06);position:relative;overflow:hidden}
+.stat-item:last-child{border-right:none}
+.stat-item::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 100%,rgba(185,28,28,.08) 0%,transparent 70%);opacity:0;transition:opacity .4s}
+.stat-item:hover::before{opacity:1}
+.stat-n{font-family:var(--display);font-size:3rem;font-weight:700;color:var(--r3);line-height:1;letter-spacing:-.05em;margin-bottom:4px;transition:color .4s}
+.stat-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(250,250,249,.35)}
+
+/* SPOTLIGHT */
+.spotlight{background:var(--ink);padding:120px 52px;position:relative;overflow:hidden}
+.spotlight::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 90% at 15% 50%,rgba(185,28,28,.16) 0%,transparent 55%),radial-gradient(ellipse 50% 60% at 85% 80%,rgba(127,29,29,.1) 0%,transparent 50%)}
+.spotlight::after{content:'"';position:absolute;right:-20px;top:-20px;font-family:var(--display);font-size:clamp(14rem,22vw,22rem);font-weight:700;font-style:italic;color:var(--r);opacity:.04;line-height:1;pointer-events:none;user-select:none}
+.spotlight-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;position:relative;z-index:2}
+.spotlight-img{border-radius:6px;overflow:hidden;position:relative}
+.spotlight-img img{width:100%;display:block;transition:transform .8s var(--spring),filter .4s;filter:brightness(.92) saturate(.9)}
+.spotlight-img:hover img{transform:scale(1.025);filter:brightness(1) saturate(1)}
+.spotlight-img::before,.spotlight-img::after{content:'';position:absolute;border-color:rgba(185,28,28,.35);border-style:solid;width:40px;height:40px;z-index:3;pointer-events:none;transition:all .5s var(--spring)}
+.spotlight-img::before{top:-10px;left:-10px;border-width:2px 0 0 2px;border-radius:2px 0 0 0}
+.spotlight-img::after{bottom:-10px;right:-10px;border-width:0 2px 2px 0;border-radius:0 0 2px 0}
+.spotlight-img:hover::before{top:-16px;left:-16px;width:52px;height:52px}
+.spotlight-img:hover::after{bottom:-16px;right:-16px;width:52px;height:52px}
+.spotlight-num{position:absolute;top:16px;left:16px;z-index:4;font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;color:rgba(250,250,249,.5);background:rgba(12,10,9,.55);backdrop-filter:blur(8px);padding:4px 9px;border-radius:3px;border:1px solid rgba(250,250,249,.1)}
+.spotlight-text .eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--r3);margin-bottom:22px;display:flex;align-items:center;gap:10px}
+.spotlight-text .eyebrow::before{content:'';width:24px;height:1px;background:var(--r3)}
+.spotlight-text h2{font-family:var(--display);font-size:clamp(2.5rem,4vw,4.2rem);font-weight:300;line-height:1.05;letter-spacing:-.045em;color:rgba(250,250,249,.95);margin-bottom:24px}
+.spotlight-text h2 em{font-style:italic;color:var(--r3)}
+.spotlight-dims{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:rgba(250,250,249,.3);text-transform:uppercase;margin-bottom:22px}
+.spotlight-statement{font-family:var(--display);font-size:1.05rem;font-style:italic;line-height:1.9;color:rgba(250,250,249,.5);margin-bottom:32px;border-left:2px solid rgba(185,28,28,.4);padding-left:22px}
+.spotlight-statement::first-letter{font-size:1.6em;line-height:.8;float:left;margin-right:4px;color:var(--r3)}
+.spotlight-award-row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* GALLERY */
+.gallery-section{padding:110px 52px 150px;max-width:1440px;margin:0 auto}
+.section-intro{margin-bottom:80px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px}
+.section-intro-rule{height:1px;background:linear-gradient(90deg,var(--bdr2),transparent)}
+.section-intro h2{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;line-height:1;letter-spacing:-.04em;color:var(--ink);white-space:nowrap}
+.section-intro h2 em{font-style:italic;color:var(--r)}
+.section-intro-desc{grid-column:1/-1;max-width:520px;font-size:.88rem;color:var(--i3);line-height:1.76;padding-left:2px}
+
+.masonry{columns:3;column-gap:22px}
+@media(max-width:1060px){.masonry{columns:2}}
+@media(max-width:620px){.masonry{columns:1}}
+
+.art-card{break-inside:avoid;margin-bottom:22px;position:relative;cursor:pointer;border-radius:8px;overflow:hidden;background:var(--bg3);box-shadow:0 2px 8px rgba(0,0,0,.06);transition:box-shadow .4s var(--spring),transform .4s var(--spring);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.art-card:hover{box-shadow:0 24px 64px rgba(0,0,0,.14),0 4px 16px rgba(0,0,0,.06)}
+.art-card img{width:100%;display:block;transition:transform .8s var(--spring),filter .5s;filter:saturate(.88) brightness(.97)}
+.art-card:hover img{transform:scale(1.04);filter:saturate(1.05) brightness(1.02)}
+.art-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,10,9,.92) 0%,rgba(12,10,9,.4) 40%,transparent 72%);opacity:0;transition:opacity .4s var(--spring);display:flex;flex-direction:column;justify-content:flex-end;padding:22px}
+.art-card:hover .art-card-overlay{opacity:1}
+.art-card-title{font-family:var(--display);font-size:1.3rem;font-weight:600;color:rgba(250,250,249,.96);letter-spacing:-.025em;margin-bottom:4px;transform:translateY(12px);transition:transform .45s var(--spring)}
+.art-card:hover .art-card-title{transform:translateY(0)}
+.art-card-meta{font-family:var(--mono);font-size:.55rem;color:rgba(250,250,249,.5);letter-spacing:.1em;text-transform:uppercase;transform:translateY(10px);transition:transform .45s .04s var(--spring)}
+.art-card:hover .art-card-meta{transform:translateY(0)}
+.art-card-badges{display:flex;gap:5px;margin-bottom:9px;transform:translateY(10px);transition:transform .45s .02s var(--spring)}
+.art-card:hover .art-card-badges{transform:translateY(0)}
+.badge{font-family:var(--mono);font-size:.49rem;letter-spacing:.09em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.badge-gold{background:rgba(251,191,36,.22);color:#FBD24C;border:1px solid rgba(251,191,36,.38)}
+.badge-silver{background:rgba(148,163,184,.16);color:#CBD5E1;border:1px solid rgba(148,163,184,.32)}
+.badge-hm{background:rgba(185,28,28,.18);color:var(--r4);border:1px solid rgba(185,28,28,.32)}
+.badge-state{background:rgba(34,197,94,.14);color:#4ADE80;border:1px solid rgba(34,197,94,.32)}
+.card-expand{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(250,250,249,.12);border:1px solid rgba(250,250,249,.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:rgba(250,250,249,.7);opacity:0;transform:scale(.7);transition:opacity .3s,transform .3s var(--bounce)}
+.art-card:hover .card-expand{opacity:1;transform:scale(1)}
+
+/* ABOUT STRIP */
+.about-strip{padding:88px 52px;background:var(--bg2);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.about-strip-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.about-item{padding:0 40px 0 0;border-right:1px solid var(--bdr);margin-right:40px}
+.about-item:last-child{border-right:none;margin-right:0;padding-right:0}
+.about-item .label{font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--r);margin-bottom:10px}
+.about-item .val{font-family:var(--display);font-size:1.7rem;font-weight:600;color:var(--ink);letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
+.about-item .desc{font-size:.84rem;color:var(--i3);line-height:1.68}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:9000;background:rgba(8,6,6,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.lightbox.open{opacity:1;pointer-events:all}
+.lb-inner{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.lightbox-img{max-width:84vw;max-height:84vh;border-radius:4px;box-shadow:0 48px 140px rgba(0,0,0,.7);object-fit:contain;transition:opacity .2s,transform .35s var(--spring);transform:scale(.97)}
+.lightbox.open .lightbox-img{transform:scale(1)}
+.lightbox-close{position:fixed;top:26px;right:28px;background:rgba(250,250,249,.06);border:1px solid rgba(250,250,249,.15);color:rgba(250,250,249,.7);font-size:1rem;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s var(--spring);font-family:var(--mono);backdrop-filter:blur(8px)}
+.lightbox-close:hover{background:rgba(185,28,28,.2);border-color:var(--rlin);color:#fff;transform:rotate(90deg) scale(1.1)}
+.lightbox-caption{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity .4s .15s}
+.lightbox.open .lightbox-caption{opacity:1}
+.lightbox-caption h3{font-family:var(--display);font-size:1.25rem;font-weight:600;color:rgba(250,250,249,.88);letter-spacing:-.02em;margin-bottom:5px}
+.lightbox-caption p{font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(250,250,249,.35)}
+.lightbox-nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(250,250,249,.05);border:1px solid rgba(250,250,249,.12);color:rgba(250,250,249,.6);width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s var(--spring);font-family:var(--mono);backdrop-filter:blur(8px)}
+.lightbox-nav:hover{background:rgba(185,28,28,.18);border-color:var(--rlin);color:#fff;transform:translateY(-50%) scale(1.1)}
+.lightbox-prev{left:20px}
+.lightbox-next{right:20px}
+.lb-progress{position:fixed;bottom:0;left:0;right:0;height:2px;background:rgba(250,250,249,.06)}
+.lb-progress-bar{height:100%;background:linear-gradient(90deg,var(--rdark),var(--r),var(--r3));transition:width .3s var(--spring)}
+
+/* FOOTER */
+footer{padding:52px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;position:relative;overflow:hidden}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--r),transparent);opacity:.25}
+.foot-sig{font-family:var(--display);font-size:1rem;font-style:italic;color:rgba(250,250,249,.8)}
+.foot-sig b{font-style:normal;color:var(--r3)}
+.foot-sub{font-family:var(--mono);font-size:.58rem;color:rgba(250,250,249,.25);letter-spacing:.06em;margin-top:3px}
+.foot-back{font-family:var(--mono);font-size:.65rem;color:rgba(250,250,249,.45);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;padding:8px 16px;border-radius:4px;border:1px solid rgba(250,250,249,.1);transition:all .2s var(--spring)}
+.foot-back:hover{color:var(--r3);border-color:var(--rlin);background:var(--rdim);transform:translateX(-2px)}
+
+/* ANIMATIONS */
+@keyframes fadeSlideUp{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .75s var(--spring),transform .75s var(--spring)}
+.reveal.on{opacity:1;transform:translateY(0)}
+.reveal.r1{transition-delay:.1s}
+.reveal.r2{transition-delay:.2s}
+.reveal.r3{transition-delay:.3s}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .spotlight-inner{grid-template-columns:1fr;gap:52px}
+  .section-intro{grid-template-columns:1fr;gap:12px}
+  .section-intro-rule{display:none}
+  .about-strip-inner{grid-template-columns:1fr;gap:0}
+  .about-item{border-right:none;margin-right:0;padding-right:0;border-bottom:1px solid var(--bdr);padding-bottom:40px;margin-bottom:40px}
+  .about-item:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+  .stats-bar-inner{grid-template-columns:1fr 1fr}
+  .stat-item:nth-child(2){border-right:none}
+  .stat-item:nth-child(3){border-top:1px solid rgba(250,250,249,.06)}
+  .stat-item:nth-child(4){border-right:none;border-top:1px solid rgba(250,250,249,.06)}
+}
+@media(max-width:768px){
+  .art-hero,.gallery-section,.spotlight,.about-strip,footer{padding-left:20px;padding-right:20px}
+  .gallery-section{padding-top:64px;padding-bottom:100px}
+  .spotlight{padding-top:64px;padding-bottom:64px}
+  .about-strip{padding-top:64px;padding-bottom:64px}
+  .stats-bar{padding:0 20px}
+  nav .nav-links{display:none}
+  .scroll-cue{right:20px}
+  .lightbox-prev{left:10px}
+  .lightbox-next{right:10px}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="cursor-glow"></div>
+
+<!-- NAV -->
+<nav id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-name"><b>L</b>illian Wang</span>
+    </a>
+    <div class="nav-r">
+      <ul class="nav-links">
+        <li><a href="index.html#hero">About</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#background">Background</a></li>
+        <li><a href="index.html#research">Research</a></li>
+        <li><a href="art.html" class="active">Art</a></li>
+      </ul>
+      <a href="index.html" class="nav-back">← Back Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="art-hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-watermark">LW</div>
+  <div class="hero-lines">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M-40 620 Q 200 580 400 640 Q 700 720 960 600 Q 1200 490 1480 550" stroke="rgba(185,28,28,.07)" stroke-width="1.5" stroke-dasharray="6 12"/>
+      <path d="M 100 820 Q 400 770 700 800 Q 1000 830 1440 780" stroke="rgba(185,28,28,.05)" stroke-width="1" stroke-dasharray="4 16"/>
+      <path d="M 1440 200 Q 1100 240 900 180 Q 600 100 300 200 Q 100 260 -20 220" stroke="rgba(239,68,68,.04)" stroke-width="1.2"/>
+    </svg>
+  </div>
+  <div class="art-hero-content">
+    <div class="art-hero-eyebrow">Visual Work · Selected Portfolio</div>
+    <h1 class="art-hero-title">
+      <span class="line1">Artist,</span>
+      <em>Lillian Wang.</em>
+    </h1>
+    <p class="art-hero-sub">
+      Specializing in colored pencil and realistic drawing.
+    </p>
+    <div class="art-awards">
+      <div class="art-award gold"><span class="award-icon">★</span> Scholastic Gold Key × 2</div>
+      <div class="art-award silver"><span class="award-icon">◈</span> Scholastic Silver Key × 1</div>
+      <div class="art-award hm"><span class="award-icon">◇</span> Honorable Mention × 2</div>
+      <div class="art-award state"><span class="award-icon">⬟</span> Illinois State Champion</div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <div class="scroll-dot"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat-item"><div class="stat-n" data-target="18">0</div><div class="stat-label">Years drawing</div></div>
+    <div class="stat-item"><div class="stat-n" data-target="5">0</div><div class="stat-label">Competition awards</div></div>
+    <div class="stat-item"><div class="stat-n" data-target="9">0</div><div class="stat-label">Works shown here</div></div>
+    <div class="stat-item"><div class="stat-n" data-target="1">0</div><div class="stat-label">State championship</div></div>
+  </div>
+</div>
+
+<!-- SPOTLIGHT -->
+<section class="spotlight">
+  <div class="spotlight-inner">
+    <div class="spotlight-img reveal">
+      <div class="spotlight-num">Featured Work</div>
+      <img src="Art/Wonder.jpg" alt="I Wonder — Illinois State Board of Education High School Division Winner"/>
+    </div>
+    <div class="spotlight-text reveal r1">
+      <div class="eyebrow">2024 ISBE · Illinois State Champion</div>
+      <h2>"I<em> Wonder"</em></h2>
+      <p class="spotlight-dims">Colored Pencils · 11×14 · Jan 2024</p>
+      <p class="spotlight-statement">"As children, we all wonder what is out there in the world. This curiosity drives us to learn more about the world every day. As we grow older, we gradually lose our innocence and grow more wary about the world around us. Life becomes more complex, and we have moments where we lose hope and feel like giving up. This drawing of me as a young child, eagerly pointing out the window, is about memorializing the innocence and wonder we have about the world as children. Sometimes we all need to fall back on that and remember our beginnings."</p>
+      <div class="spotlight-award-row">
+        <div class="art-award state"><span class="award-icon">⬟</span> ISBE High School Division Winner</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="section-intro reveal">
+    <h2>Selected<em> Works</em></h2>
+    <div class="section-intro-rule"></div>
+    <div></div>
+    <p class="section-intro-desc">Nine pieces from an ongoing practice — drawing since age six, competing since high school. Click any work to view it full size.</p>
+  </div>
+
+  <div class="masonry" id="gallery">
+
+    <div class="art-card reveal" data-title="Absorbed" data-meta="Colored Pencils · 11×14 · Nov 2024 · Scholastic Gold Key">
+      <img src="Art/Absorbed.jpg" alt="Absorbed"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-badges"><span class="badge badge-gold">★ Gold Key</span></div>
+        <div class="art-card-title">Absorbed</div>
+        <div class="art-card-meta">Colored Pencils · 11×14 · Nov 2024</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal r1" data-title="Guarded" data-meta="Oil Paint on Canvas · 12×16 · Dec 2024 · Scholastic Gold Key">
+      <img src="Art/Guarded.jpg" alt="Guarded"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-badges"><span class="badge badge-gold">★ Gold Key</span></div>
+        <div class="art-card-title">Guarded</div>
+        <div class="art-card-meta">Oil on Canvas · 12×16 · Dec 2024</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal r2" data-title="Bird and Longhorn" data-meta="Colored Pencils · 8×11 · Feb 2023 · Scholastic Silver Key">
+      <img src="Art/Bird_and_Longhorn.jpg" alt="Bird and Longhorn"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-badges"><span class="badge badge-silver">◈ Silver Key</span></div>
+        <div class="art-card-title">Bird and Longhorn</div>
+        <div class="art-card-meta">Colored Pencils · 8×11 · Feb 2023</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal" data-title="Pink" data-meta="Colored Pencils · 13×15 · Sep 2021 · Honorable Mention">
+      <img src="Art/Pink.jpg" alt="Pink"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-badges"><span class="badge badge-hm">◇ Honorable Mention</span></div>
+        <div class="art-card-title">Pink</div>
+        <div class="art-card-meta">Colored Pencils · 13×15 · Sep 2021</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal r1" data-title='"W" for the Win' data-meta='Pencil · 5×8 · Aug 2022 · Honorable Mention'>
+      <img src="Art/W_for_the_Win.JPG" alt='"W" for the Win'/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-badges"><span class="badge badge-hm">◇ Honorable Mention</span></div>
+        <div class="art-card-title">"W" for the Win</div>
+        <div class="art-card-meta">Pencil · 5×8 · Aug 2022</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal r2" data-title="Melting into Chaos" data-meta="Acrylic Paint · 11×16">
+      <img src="Art/Melting_into_Chaos.jpg" alt="Melting into Chaos"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-title">Melting into Chaos</div>
+        <div class="art-card-meta">Acrylic Paint · 11×16</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal" data-title="Disillusioned" data-meta="Colored Pencils · 9×12 · Oct 2024">
+      <img src="Art/Disillusioned.jpg" alt="Disillusioned"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-title">Disillusioned</div>
+        <div class="art-card-meta">Colored Pencils · 9×12 · Oct 2024</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal r1" data-title="I Wonder" data-meta="Colored Pencils · 11×14 · Jan 2024 · ISBE State Champion">
+      <img src="Art/Wonder.jpg" alt="I Wonder"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-badges"><span class="badge badge-state">⬟ State Champion</span></div>
+        <div class="art-card-title">I Wonder</div>
+        <div class="art-card-meta">Colored Pencils · 11×14 · Jan 2024</div>
+      </div>
+    </div>
+
+    <div class="art-card reveal r2" data-title="Opulence" data-meta="Colored Pencils · 11×14 · Dec 2023">
+      <img src="Art/Opulence.jpg" alt="Opulence"/><div class="card-expand">⤢</div>
+      <div class="art-card-overlay">
+        <div class="art-card-title">Opulence</div>
+        <div class="art-card-meta">Colored Pencils · 11×14 · Dec 2023</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-strip-inner">
+    <div class="about-item reveal">
+      <div class="label">Recognition</div>
+      <div class="val">5 Awards</div>
+      <div class="desc">2× Scholastic Gold Key, 1× Silver Key, 2× Honorable Mention, and the 2024 Illinois State Board of Education High School Division championship.</div>
+    </div>
+    <div class="about-item reveal r1">
+      <div class="label">Specialty</div>
+      <div class="val">Colored Pencil</div>
+      <div class="desc">Realistic drawing with colored pencils is the home base. Also works in oil on canvas, acrylic, and graphite — slow, tactile media with real texture.</div>
+    </div>
+    <div class="about-item reveal r2">
+      <div class="label">Practice</div>
+      <div class="val">Since Age 6</div>
+      <div class="desc">An ongoing practice. These are selected pieces — drawing continues in free time alongside the math and the code at Princeton.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer" aria-modal="true">
+  <div class="lb-inner">
+    <button class="lightbox-close" id="lb-close" aria-label="Close">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Previous">‹</button>
+    <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Next">›</button>
+    <img class="lightbox-img" id="lb-img" src="" alt=""/>
+    <div class="lightbox-caption">
+      <h3 id="lb-title"></h3>
+      <p id="lb-meta"></p>
+    </div>
+  </div>
+  <div class="lb-progress"><div class="lb-progress-bar" id="lb-progress-bar"></div></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="foot-sig"><b>Lillian</b> Wang</div>
+    <div class="foot-sub">Math @ Princeton '29 · Artist · Chicago, IL</div>
+  </div>
+  <a href="index.html" class="foot-back">← Back to main site</a>
+</footer>
+
+<script>
+/* PAGE PROGRESS */
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  prog.style.width = Math.min(window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100) + '%';
+}, {passive:true});
+
+/* CURSOR GLOW */
+const glow = document.getElementById('cursor-glow');
+window.addEventListener('mousemove', e => {
+  glow.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+}, {passive:true});
+
+/* NAV SCROLL */
+const nav = document.getElementById('site-nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20), {passive:true});
+
+/* REVEAL OBSERVER */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('on'); revObs.unobserve(e.target); }});
+}, {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+/* STAT COUNTERS */
+function animCount(el, target) {
+  const dur = 1500, start = performance.now();
+  (function step(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * target);
+    if(p < 1) requestAnimationFrame(step);
+    else {
+      el.textContent = target;
+      el.style.transition = 'color .4s';
+      el.style.color = 'var(--r4)';
+      setTimeout(() => el.style.color = '', 500);
+    }
+  })(start);
+}
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    const el = e.target, t = parseInt(el.dataset.target);
+    if(!isNaN(t) && !el.dataset.counted) { el.dataset.counted = '1'; animCount(el, t); }
+    statObs.unobserve(el);
+  });
+}, {threshold:.4});
+document.querySelectorAll('.stat-n[data-target]').forEach(el => statObs.observe(el));
+
+/* LIGHTBOX */
+const cards = Array.from(document.querySelectorAll('.art-card'));
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbTitle = document.getElementById('lb-title');
+const lbMeta = document.getElementById('lb-meta');
+const lbBar = document.getElementById('lb-progress-bar');
+let currentIdx = 0;
+
+function openLightbox(idx) {
+  currentIdx = idx;
+  const card = cards[idx];
+  const img = card.querySelector('img');
+  lbImg.style.opacity = '0';
+  setTimeout(() => { lbImg.src = img.src; lbImg.alt = img.alt; lbImg.style.opacity = '1'; }, 120);
+  lbTitle.textContent = card.dataset.title || img.alt;
+  lbMeta.textContent = card.dataset.meta || '';
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  lbBar.style.width = ((currentIdx + 1) / cards.length * 100) + '%';
+}
+function closeLightbox() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+function navLightbox(dir) { currentIdx = (currentIdx + dir + cards.length) % cards.length; openLightbox(currentIdx); }
+
+cards.forEach((card, i) => card.addEventListener('click', () => openLightbox(i)));
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-prev').addEventListener('click', () => navLightbox(-1));
+document.getElementById('lb-next').addEventListener('click', () => navLightbox(1));
+lb.addEventListener('click', e => { if(e.target === lb) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if(!lb.classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') navLightbox(-1);
+  if(e.key === 'ArrowRight') navLightbox(1);
+});
+
+/* CARD 3D TILT */
+if(window.innerWidth > 768) {
+  document.querySelectorAll('.art-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5;
+      const y = (e.clientY - r.top) / r.height - .5;
+      card.style.transform = `translateY(-4px) perspective(600px) rotateX(${y * -4}deg) rotateY(${x * 4}deg)`;
+    });
+    card.addEventListener('mouseleave', () => card.style.transform = '');
+  });
+}
+</script>
+</body>
+</html>
