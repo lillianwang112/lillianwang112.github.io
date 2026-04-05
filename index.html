@@ -333,6 +333,7 @@ h2{font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;l
 .hanzi-bg{background:linear-gradient(135deg,#0f1a0e,#0d1c0c,#0f1a12)}
 .tiger-bg{background:linear-gradient(135deg,#1a1200,#1e1500,#14100a)}
 .poke-bg{background:linear-gradient(135deg,#1a1a2e,#0f0f1e,#13121e)}
+.alpha-bg{background:linear-gradient(135deg,#0d1a0d,#0a1a12,#0d150d)}
 .pc-img-fallback::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 65% 35%,var(--glow1,rgba(185,28,28,.18)) 0%,transparent 60%),radial-gradient(ellipse at 25% 75%,var(--glow2,rgba(59,130,246,.1)) 0%,transparent 50%)}
 .fallback-glyph{font-size:3.6rem;position:relative;z-index:1;filter:drop-shadow(0 0 22px var(--glyph-glow,rgba(185,28,28,.5)));animation:fallbackFloat 3.5s ease-in-out infinite}
 @keyframes fallbackFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
@@ -764,7 +765,7 @@ section{scroll-margin-top:80px}
           <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="var(--r)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
           </svg>
-          <div class="sb-n" data-target="4" data-suf="">4</div>
+          <div class="sb-n" data-target="5" data-suf="">5</div>
           <div><div class="sb-label">Tools shipped</div><div class="sb-sub">single-file · zero install</div></div>
         </div>
 
@@ -847,12 +848,30 @@ section{scroll-margin-top:80px}
 
       <div class="pc feat reveal r1">
         <div class="pc-img">
+          <img src="https://raw.githubusercontent.com/lillianwang112/alphamove/main/public/hero.jpg" alt="AlphaMove" loading="lazy"
+               onerror="this.parentElement.innerHTML='&lt;div class=\'pc-img-fallback alpha-bg\'&gt;&lt;span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(34,197,94,.5)\'&gt;♟&lt;/span&gt;&lt;span class=\'fallback-label\'&gt;alphamove&lt;/span&gt;&lt;/div&gt;'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/alphamove/main/public/alphamove-icon.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">React 19</span><span class="glass-pill">TypeScript</span><span class="glass-pill">Firebase</span><span class="glass-pill">Finnhub API</span><span class="glass-pill">Puter.js</span></div></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-num">01 / Featured · 🏆 Hackathon Winner</div>
+          <div class="pc-head"><span class="pc-name">AlphaMove</span><span class="pc-tag">AI Finance</span></div>
+          <p class="pc-desc">Chess meets Duolingo for investing — an AI-mentored paper trading simulator built in 8 hours at Princeton's AI × Finance Hackathon. <strong>🏆 2nd Place, Consumer Application Track · $1,000 prize · co-sponsored by Anthropic.</strong> Before every trade, your AI mentor pressure-tests your reasoning via Socratic questioning. After every trade, you get a chess-style move rating — <em>brilliant, great, good, inaccuracy, mistake, blunder</em> — based on how well you thought, not just whether the stock went up. Multi-asset trading, AI morning brief, 10-level mentor system, XP/streak gamification.</p>
+          <div class="pc-pills"><span class="pp">React 19</span><span class="pp">TypeScript</span><span class="pp">Firebase</span><span class="pp">Finnhub API</span><span class="pp">Puter.js</span><span class="pp">GitHub Pages</span></div>
+          <div class="pc-links">
+            <a href="https://lillianwang112.github.io/alphamove/" class="pl launch" target="_blank" rel="noopener">↗ Launch App</a>
+            <a href="https://github.com/lillianwang112/alphamove" class="pl" target="_blank" rel="noopener">Source</a>
+          </div>
+        </div>
+      </div>
+      <div class="pc reveal r1">
+        <div class="pc-img">
           <img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/screenshots/hero.png" alt="Axiom" loading="lazy"
                onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback axiom-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(99,179,237,.5)\'>∑</span><span class=\'fallback-label\'>axiom-study</span></div>'"/>
           <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/icons/icon-192x192.png" alt="" onerror="this.style.display='none'"/></div>
         </div>
         <div class="pc-body">
-          <div class="pc-num">01 / Featured</div>
+          <div class="pc-num">02</div>
           <div class="pc-head"><span class="pc-name">Axiom</span><span class="pc-tag">Math Tool</span></div>
           <p class="pc-desc">A math study environment built for active recall — because reading past theorems isn't the same as knowing them. Paste lecture notes or textbook LaTeX and Axiom structures them into collapsible definitions, theorems, lemmas, and proofs. A context-aware AI tutor is one click away. KaTeX rendering, Firebase sync, study streak tracking.</p>
           <div class="pc-pills"><span class="pp">KaTeX</span><span class="pp">Firebase</span><span class="pp">Puter.js</span><span class="pp">GitHub Pages</span></div>
@@ -871,7 +890,7 @@ section{scroll-margin-top:80px}
           <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/chinese-learning-app/main/icons/icon-72.png" alt="" onerror="this.style.display='none'"/></div>
         </div>
         <div class="pc-body">
-          <div class="pc-num">02</div>
+          <div class="pc-num">03</div>
           <div class="pc-head"><span class="pc-name">中文-Learn</span><span class="pc-tag">Study App</span></div>
           <p class="pc-desc" id="commit-count-desc">A full-featured Chinese vocabulary PWA built for Princeton's CHI 108. 900+ vocab cards across 25 topic decks, SM-2 spaced repetition, animated stroke-order handwriting, AI grading, and six study modes. 238 commits and counting.</p>
           <div class="pc-pills"><span class="pp">React</span><span class="pp">Firebase</span><span class="pp">Hanzi Writer</span><span class="pp">SM-2</span></div>
@@ -890,7 +909,7 @@ section{scroll-margin-top:80px}
           <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/tiger-calendar/main/icons/icon-96x96.png" alt="" onerror="this.style.display='none'"/></div>
         </div>
         <div class="pc-body">
-          <div class="pc-num">03</div>
+          <div class="pc-num">04</div>
           <div class="pc-head"><span class="pc-name">TigerCalendar</span><span class="pc-tag">PWA</span></div>
           <p class="pc-desc">A Princeton-specific calendar PWA that turns your course schedule into something actually usable. Drag-to-create events, office hours tracking, ICS export, swipe navigation, Firebase sync. Designed around how Princeton students actually plan.</p>
           <div class="pc-pills"><span class="pp">React</span><span class="pp">Firebase</span><span class="pp">GitHub Pages</span></div>
@@ -908,7 +927,7 @@ section{scroll-margin-top:80px}
                onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback poke-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(185,28,28,.5)\'>⚡</span><span class=\'fallback-label\'>PokéRace · typing race game</span></div>'"/>
         </div>
         <div class="pc-body">
-          <div class="pc-num">04</div>
+          <div class="pc-num">05</div>
           <div class="pc-head"><span class="pc-name">PokéRace</span><span class="pc-tag">Game</span></div>
           <p class="pc-desc">A Pokémon typing race game that turns your study material into a speed challenge. Race bots, level up 20 Pokémon with unique passives, earn XP from lecture notes. Full combo system, Nitro Boost mechanics, 60fps canvas trail renderer — one HTML file.</p>
           <div class="pc-pills"><span class="pp">React</span><span class="pp">Canvas API</span><span class="pp">Web Audio API</span><span class="pp">localStorage</span></div>
@@ -978,6 +997,16 @@ section{scroll-margin-top:80px}
         </div>
       </div>
 
+      <div class="tl-row reveal r2">
+          <div class="tl-year">Mar 2026</div>
+          <div class="tl-dot-col"><div class="tl-dot"></div></div>
+          <div class="tl-body">
+          <div class="tl-title">AI × Finance Hackathon — AlphaMove</div>
+          <div class="tl-sub">🏆 2nd Place · Consumer Application Track · $1,000 Prize</div>
+          <p class="tl-desc">Built AlphaMove in 8 hours at Princeton's AI × Finance Hackathon (co-sponsored by Anthropic). An AI-mentored paper trading simulator that rates your trades like chess moves — brilliant to blunder — based on reasoning quality, not just stock direction.</p>
+          <div class="tl-tags"><span class="tl-tag">React 19</span><span class="tl-tag">TypeScript</span><span class="tl-tag">Anthropic</span><span class="tl-tag">Finnhub API</span><span class="tl-tag">$1,000 Prize</span></div>
+          </div>
+      </div>
       <div class="tl-row reveal r3">
         <div class="tl-year">2024</div>
         <div class="tl-dot-col"><div class="tl-dot"></div></div>
@@ -1043,10 +1072,10 @@ section{scroll-margin-top:80px}
       <h2>What's on my mind</h2>
     </div>
     <div class="now-grid">
-      <div class="nc feat reveal r1"><span class="nc-ico">⚡</span><div class="nc-label">Coming Up</div><div class="nc-title">ZERO Lab · Princeton HMEI</div><p class="nc-desc">Joining Jesse Jenkins' energy systems optimization group. Building real software for real energy policy. Starts June 1.</p></div>
-      <div class="nc reveal r1"><span class="nc-ico">∑</span><div class="nc-label">Building</div><div class="nc-title">Iterating on Axiom</div><p class="nc-desc">Improving the LaTeX parser, adding collaborative study rooms, refining the AI tutor's proof-checking.</p></div>
-      <div class="nc reveal r2"><span class="nc-ico">🐯</span><div class="nc-label">Building</div><div class="nc-title">TigerCalendar v2</div><p class="nc-desc">Loading skeleton, dropdown view selector, ICS export rework. Drafting a pitch for Princeton registrar API access.</p></div>
-      <div class="nc reveal r3"><span class="nc-ico">📖</span><div class="nc-label">Studying</div><div class="nc-title">CHI 108 SRS Review</div><p class="nc-desc">Reviewing ~419 remaining vocabulary cards through my own spaced repetition app. Eating the dog food.</p></div>
+      <div class="nc feat reveal r1"><span class="nc-ico">🏆</span><div class="nc-label">Just Shipped</div><div class="nc-title">AlphaMove · 2nd Place</div><p class="nc-desc">Built in 8 hours at Princeton's AI × Finance Hackathon. 2nd Place, Consumer Application Track — $1,000 prize, co-sponsored by Anthropic.</p></div>
+      <div class="nc reveal r1"><span class="nc-ico">📚</span><div class="nc-label">Studying</div><div class="nc-title">Finishing the Semester</div><p class="nc-desc">Finals prep across all courses. Crunch time.</p></div>
+      <div class="nc reveal r2"><span class="nc-ico">⚡</span><div class="nc-label">Coming Up</div><div class="nc-title">ZERO Lab · Princeton HMEI</div><p class="nc-desc">Joining Jesse Jenkins' energy systems optimization group. Building real software for real energy policy. Starts June 1.</p></div>
+      <div class="nc reveal r3"><span class="nc-ico">∑</span><div class="nc-label">Building</div><div class="nc-title">Iterating on Axiom</div><p class="nc-desc">Improving the LaTeX parser, adding collaborative study rooms, refining the AI tutor's proof-checking.</p></div>
     </div>
     <div class="cta-strip reveal r4">
       <div class="cta-strip-l">
@@ -1083,7 +1112,7 @@ section{scroll-margin-top:80px}
 <!-- STATUS WIDGET -->
 <div id="status-widget" role="status" aria-live="polite">
   <span class="sw-dot"></span>
-  <span>Currently: Axiom v2.1</span>
+  <span>Currently: AlphaMove · 🏆 Hackathon Winner</span>
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -1207,9 +1236,11 @@ if(wm)addEventListener('scroll',()=>{
     {t:'Princeton Research Day 2026',h:false},
     {t:'PROMYS · Boston University',h:false},
     {t:'Smith Normal Form · JMM 2026',h:false},
-    {t:'4 open-source tools shipped',h:false},
+    {t:'5 open-source tools shipped',h:false},
     {t:COMMIT_COUNT+' commits · 中文-Learn',h:true},
     {t:'MAT217 · Honors Linear Algebra',h:false},
+    {t:'AI × Finance Hackathon · 2nd Place · $1,000',h:true},
+    {t:'AlphaMove · built in 8 hours',h:false},
     {t:'Modeling the Future · 2nd Place',h:false},
     {t:'Pokémon GO · Level 76',h:true},
     {t:DUOLINGO_STREAK+'-day Duolingo streak 🔥',h:false},
