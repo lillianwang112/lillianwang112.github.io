@@ -6,6 +6,21 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
+<!-- Cache-bust version: update this string each deploy to force a reload -->
+<meta name="site-version" content="v20250419-1"/>
+<script>
+(function(){
+  var VERSION='v20250419-1';
+  var stored=localStorage.getItem('site-version');
+  if(stored && stored!==VERSION){
+    localStorage.setItem('site-version',VERSION);
+    // Hard reload, bypassing cache
+    window.location.reload(true);
+  } else {
+    localStorage.setItem('site-version',VERSION);
+  }
+})();
+</script>
 <title>Lillian Wang — Math @ Princeton</title>
 <meta name="description" content="Lillian Wang — Math @ Princeton '29. Building tools I wish existed. ZERO Lab internship. Applied math PhD track."/>
 <meta name="google-site-verification" content="ecJf1j3jE1qeEwEBkO6Z4E8i9tVYqICHdxxBN81JIgk" />
