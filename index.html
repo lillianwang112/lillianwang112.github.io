@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <title>Lillian Wang — Math @ Princeton</title>
 <meta name="description" content="Lillian Wang — Math @ Princeton '29. Building tools I wish existed. ZERO Lab internship. Applied math PhD track."/>
 <meta name="google-site-verification" content="ecJf1j3jE1qeEwEBkO6Z4E8i9tVYqICHdxxBN81JIgk" />
@@ -318,6 +321,13 @@ h2{font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;l
   object-position:55% center !important;
   background:var(--bg2);
   padding:8px 4px;
+}
+/* Centered contain images (like tiger calendar) */
+.img-contain{
+  object-fit:contain !important;
+  object-position:center center !important;
+  background:var(--bg2);
+  padding:12px;
 }
 /* Chinese app: nudge left */
 .img-hanzi{object-fit:cover;object-position:35% center}
@@ -779,10 +789,13 @@ section{scroll-margin-top:80px}
 
         <div class="sb">
           <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="var(--r)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/>
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
           </svg>
-          <div class="sb-n" id="commit-count-n" data-target="238" data-suf="">238</div>
-          <div><div class="sb-label">Git commits</div><div class="sb-sub">中文-Learn alone</div></div>
+          <div class="sb-n" id="commit-count-n" data-target="2" data-suf="">2</div>
+          <div><div class="sb-label">Hackathon wins</div><div class="sb-sub">中文-Learn alone</div></div>
         </div>
 
         <div class="sb">
@@ -848,16 +861,16 @@ section{scroll-margin-top:80px}
 
       <div class="pc feat reveal r1">
         <div class="pc-img">
-          <img src="https://raw.githubusercontent.com/lillianwang112/spark/main/hero.jpg" alt="Spark" loading="lazy"
+          <img src="https://raw.githubusercontent.com/lillianwang112/spark/main/public/hero.jpg" alt="Spark" loading="lazy" class="img-contain"
                onerror="this.parentElement.innerHTML='&lt;div class=\'pc-img-fallback spark-bg\'&gt;&lt;span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(251,146,60,.5)\'&gt;✦&lt;/span&gt;&lt;span class=\'fallback-label\'&gt;spark&lt;/span&gt;&lt;/div&gt;'"/>
-          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/spark/main/apple-touch-icon-180x180.png" alt="" onerror="this.style.display='none'"/></div>
-          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">🏆 Best Education · HackPrinceton Spring '26</span><span class="glass-pill">Meta Glasses</span><span class="glass-pill">Curiosity engine for learning</span></div></div>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/spark/main/public/apple-touch-icon-180x180.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">🏆 Best Education · HackPrinceton Spring '26</span><span class="glass-pill">🥽 Won Meta Glasses</span><span class="glass-pill">Curiosity engine for learning</span></div></div>
         </div>
         <div class="pc-body">
           <div class="pc-num">01 / Featured · 🏆 Hackathon Winner</div>
           <div class="pc-head"><span class="pc-name">Spark</span><span class="pc-tag">EdTech</span></div>
-          <p class="pc-desc">A curiosity engine for learning — built at HackPrinceton Spring 2026. <strong>🏆 Best Education, the track for making learning more interactive, accessible, and personalized. Built for Meta Glasses.</strong> Spark reimagines how you explore knowledge: FreeFall mode for rapid topic sampling, AI-generated explainers and quizzes, and a care/tend/master workflow that actually builds retention. Visual knowledge tree, streak tracking, collaborative groups, and opportunity recommendations matched to what you're learning.</p>
-          <div class="pc-pills"><span class="pp">React</span><span class="pp">Vite</span><span class="pp">Tailwind CSS</span><span class="pp">Framer Motion</span><span class="pp">Claude AI</span><span class="pp">Meta Glasses</span><span class="pp">Firebase</span></div>
+          <p class="pc-desc">A curiosity engine for learning — built at HackPrinceton Spring 2026. <strong>🏆 Best Education, the track for making learning more interactive, accessible, and personalized. Won Meta Glasses.</strong> Spark reimagines how you explore knowledge: FreeFall mode for rapid topic sampling, AI-generated explainers and quizzes, and a care/tend/master workflow that actually builds retention. Visual knowledge tree, streak tracking, collaborative groups, and opportunity recommendations matched to what you're learning.</p>
+          <div class="pc-pills"><span class="pp">React</span><span class="pp">Vite</span><span class="pp">Tailwind CSS</span><span class="pp">Framer Motion</span><span class="pp">Claude AI</span><span class="pp">Firebase</span></div>
           <div class="pc-links">
             <a href="https://lillianwang112.github.io/spark/" class="pl launch" target="_blank" rel="noopener">↗ Launch App</a>
             <a href="https://github.com/lillianwang112/spark" class="pl" target="_blank" rel="noopener">Source</a>
@@ -867,26 +880,26 @@ section{scroll-margin-top:80px}
 
       <div class="pc reveal r1">
         <div class="pc-img">
-          <img src="https://raw.githubusercontent.com/lillianwang112/PokeRace/main/screenshots/hero.jpeg"
-               alt="PokéRace" loading="lazy"
-               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback poke-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(185,28,28,.5)\'>⚡</span><span class=\'fallback-label\'>PokéRace · typing race game</span></div>'"/>
-          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">Race bots through your own notes</span><span class="glass-pill">20 Pokémon with unique passives</span><span class="glass-pill">Entire game in one HTML file</span></div></div>
+          <img src="https://raw.githubusercontent.com/lillianwang112/alphamove/main/public/hero.jpg" alt="AlphaMove" loading="lazy" class="img-contain"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback alpha-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(34,197,94,.5)\'>♟</span><span class=\'fallback-label\'>alphamove</span></div>'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/alphamove/main/public/alphamove-icon.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">🏆 2nd Place · Consumer Track</span><span class="glass-pill">Built in 8 hours</span><span class="glass-pill">$1,000 · Co-sponsored by Anthropic</span></div></div>
         </div>
         <div class="pc-body">
-          <div class="pc-num">02</div>
-          <div class="pc-head"><span class="pc-name">PokéRace</span><span class="pc-tag">Game</span></div>
-          <p class="pc-desc">A Pokémon typing race game that turns your study material into a speed challenge. Race bots, level up 20 Pokémon with unique passives, earn XP from lecture notes. Full combo system, Nitro Boost mechanics, 60fps canvas trail renderer — one HTML file.</p>
-          <div class="pc-pills"><span class="pp">React</span><span class="pp">Canvas API</span><span class="pp">Web Audio API</span><span class="pp">localStorage</span></div>
+          <div class="pc-num">02 · 🏆 Hackathon Winner</div>
+          <div class="pc-head"><span class="pc-name">AlphaMove</span><span class="pc-tag">AI Finance</span></div>
+          <p class="pc-desc">Chess meets Duolingo for investing — an AI-mentored paper trading simulator built in 8 hours at Princeton's AI × Finance Hackathon. <strong>🏆 2nd Place, Consumer Application Track · $1,000 prize · co-sponsored by Anthropic.</strong> Before every trade, your AI mentor pressure-tests your reasoning via Socratic questioning. After every trade, you get a chess-style move rating — <em>brilliant, great, good, inaccuracy, mistake, blunder</em> — based on how well you thought, not just whether the stock went up. Multi-asset trading, AI morning brief, 10-level mentor system, XP/streak gamification.</p>
+          <div class="pc-pills"><span class="pp">React 19</span><span class="pp">TypeScript</span><span class="pp">Firebase</span><span class="pp">Finnhub API</span><span class="pp">Puter.js</span><span class="pp">GitHub Pages</span></div>
           <div class="pc-links">
-            <a href="https://lillianwang112.github.io/PokeRace/" class="pl launch" target="_blank" rel="noopener">↗ Launch</a>
-            <a href="https://github.com/lillianwang112/PokeRace" class="pl" target="_blank" rel="noopener">Source</a>
+            <a href="https://lillianwang112.github.io/alphamove/" class="pl launch" target="_blank" rel="noopener">↗ Launch App</a>
+            <a href="https://github.com/lillianwang112/alphamove" class="pl" target="_blank" rel="noopener">Source</a>
           </div>
         </div>
       </div>
 
       <div class="pc reveal r1">
         <div class="pc-img">
-          <img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/screenshots/hero.png" alt="Axiom" loading="lazy"
+          <img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/screenshots/hero.png" alt="Axiom" loading="lazy" class="img-contain"
                onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback axiom-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(99,179,237,.5)\'>∑</span><span class=\'fallback-label\'>axiom-study</span></div>'"/>
           <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/axiom-study/main/icons/icon-192x192.png" alt="" onerror="this.style.display='none'"/></div>
           <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">Paste LaTeX → study-ready notes</span><span class="glass-pill">Context-aware AI tutor</span><span class="glass-pill">Built for MAT217</span></div></div>
@@ -906,7 +919,7 @@ section{scroll-margin-top:80px}
       <div class="pc reveal r2">
         <div class="pc-img">
           <img src="https://raw.githubusercontent.com/lillianwang112/chinese-learning-app/main/screenshots/hero.jpeg"
-               alt="中文-Learn" class="img-hanzi" loading="lazy"
+               alt="中文-Learn" class="img-contain" loading="lazy"
                onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback hanzi-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(74,222,128,.4)\'>汉</span><span class=\'fallback-label\'>chinese-learning-app</span></div>'"/>
           <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/chinese-learning-app/main/icons/icon-72.png" alt="" onerror="this.style.display='none'"/></div>
           <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">900+ vocab · 25 topic decks</span><span class="glass-pill">238 commits and counting</span><span class="glass-pill">My daily driver for CHI108</span></div></div>
@@ -945,19 +958,39 @@ section{scroll-margin-top:80px}
 
       <div class="pc reveal r3">
         <div class="pc-img">
-          <img src="https://raw.githubusercontent.com/lillianwang112/alphamove/main/public/hero.jpg" alt="AlphaMove" loading="lazy"
-               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback alpha-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(34,197,94,.5)\'>♟</span><span class=\'fallback-label\'>alphamove</span></div>'"/>
-          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/alphamove/main/public/alphamove-icon.png" alt="" onerror="this.style.display='none'"/></div>
-          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">🏆 2nd Place · Consumer Track</span><span class="glass-pill">Built in 8 hours</span><span class="glass-pill">$1,000 · Co-sponsored by Anthropic</span></div></div>
+          <img src="https://raw.githubusercontent.com/lillianwang112/PokeRace/main/screenshots/hero.jpeg"
+               alt="PokéRace" loading="lazy" class="img-contain"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback poke-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(185,28,28,.5)\'>⚡</span><span class=\'fallback-label\'>PokéRace · typing race game</span></div>'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/PokeRace/main/icons/icon-192x192.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">Race bots through your own notes</span><span class="glass-pill">20 Pokémon with unique passives</span><span class="glass-pill">Entire game in one HTML file</span></div></div>
         </div>
         <div class="pc-body">
-          <div class="pc-num">06 · 🏆 Hackathon Winner</div>
-          <div class="pc-head"><span class="pc-name">AlphaMove</span><span class="pc-tag">AI Finance</span></div>
-          <p class="pc-desc">Chess meets Duolingo for investing — an AI-mentored paper trading simulator built in 8 hours at Princeton's AI × Finance Hackathon. <strong>🏆 2nd Place, Consumer Application Track · $1,000 prize · co-sponsored by Anthropic.</strong> Before every trade, your AI mentor pressure-tests your reasoning via Socratic questioning. After every trade, you get a chess-style move rating — <em>brilliant, great, good, inaccuracy, mistake, blunder</em> — based on how well you thought, not just whether the stock went up. Multi-asset trading, AI morning brief, 10-level mentor system, XP/streak gamification.</p>
-          <div class="pc-pills"><span class="pp">React 19</span><span class="pp">TypeScript</span><span class="pp">Firebase</span><span class="pp">Finnhub API</span><span class="pp">Puter.js</span><span class="pp">GitHub Pages</span></div>
+          <div class="pc-num">06</div>
+          <div class="pc-head"><span class="pc-name">PokéRace</span><span class="pc-tag">Game</span></div>
+          <p class="pc-desc">A Pokémon typing race game that turns your study material into a speed challenge. Race bots, level up 20 Pokémon with unique passives, earn XP from lecture notes. Full combo system, Nitro Boost mechanics, 60fps canvas trail renderer — one HTML file.</p>
+          <div class="pc-pills"><span class="pp">React</span><span class="pp">Canvas API</span><span class="pp">Web Audio API</span><span class="pp">localStorage</span></div>
           <div class="pc-links">
-            <a href="https://lillianwang112.github.io/alphamove/" class="pl launch" target="_blank" rel="noopener">↗ Launch App</a>
-            <a href="https://github.com/lillianwang112/alphamove" class="pl" target="_blank" rel="noopener">Source</a>
+            <a href="https://lillianwang112.github.io/PokeRace/" class="pl launch" target="_blank" rel="noopener">↗ Launch</a>
+            <a href="https://github.com/lillianwang112/PokeRace" class="pl" target="_blank" rel="noopener">Source</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc reveal r3">
+        <div class="pc-img">
+          <img src="https://raw.githubusercontent.com/lillianwang112/hopemaxx/main/public/hero.png" alt="Hopemaxx" loading="lazy" class="img-contain"
+               onerror="this.parentElement.innerHTML='<div class=\'pc-img-fallback hopemaxx-bg\'><span class=\'fallback-glyph\' style=\'--glyph-glow:rgba(167,139,250,.5)\'>♡</span><span class=\'fallback-label\'>hopemaxx</span></div>'"/>
+          <div class="pc-icon-badge"><img src="https://raw.githubusercontent.com/lillianwang112/hopemaxx/main/public/icons/icon-192x192.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="pc-glass"><div class="glass-pills"><span class="glass-pill">Quest-based charitable giving</span><span class="glass-pill">AI proof verification</span><span class="glass-pill">Vibeathon 2026 · Social Systems</span></div></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-num">07</div>
+          <div class="pc-head"><span class="pc-name">Hopemaxx</span><span class="pc-tag">Civic Tech</span></div>
+          <p class="pc-desc">A quest-based charitable giving platform where donors post funded tasks and community members complete them with BeReal-style photo proof. Claude AI verifies submissions and releases escrow-locked bounties. Dual reputation systems for doers and donors, an Aura Score for community engagement, and a closed-loop economy that nudges earners to fund future quests.</p>
+          <div class="pc-pills"><span class="pp">React 18</span><span class="pp">Vite</span><span class="pp">Tailwind CSS</span><span class="pp">Framer Motion</span><span class="pp">Leaflet.js</span><span class="pp">Claude API</span><span class="pp">localStorage</span></div>
+          <div class="pc-links">
+            <a href="https://lillianwang112.github.io/hopemaxx/" class="pl launch" target="_blank" rel="noopener">↗ Launch</a>
+            <a href="https://github.com/lillianwang112/hopemaxx" class="pl" target="_blank" rel="noopener">Source</a>
           </div>
         </div>
       </div>
@@ -985,6 +1018,17 @@ section{scroll-margin-top:80px}
           <div class="tl-sub">Software Engineer · Energy Systems</div>
           <div class="tl-desc">Joining Jesse Jenkins' group at Princeton's High Meadows Environmental Institute. Building software for energy systems optimization models — real tools for real climate policy. Starting June 1.</div>
           <div class="tl-tags"><span class="tl-tag">Python</span><span class="tl-tag">Optimization</span><span class="tl-tag">Energy Systems</span><span class="tl-tag">HMEI</span></div>
+        </div>
+      </div>
+
+      <div class="tl-row reveal r1">
+        <div class="tl-year">Apr 2026</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">HackPrinceton Spring 2026 — Spark</div>
+          <div class="tl-sub">🏆 Best Education · Won Meta Glasses</div>
+          <p class="tl-desc">Built Spark at HackPrinceton Spring 2026 — a curiosity-first learning platform with AI-generated explainers, FreeFall topic discovery, and a care/tend/master retention workflow. Won Best Education, the track for making learning more interactive, accessible, and personalized. Won Meta Glasses as a prize.</p>
+          <div class="tl-tags"><span class="tl-tag">React</span><span class="tl-tag">Claude AI</span><span class="tl-tag">Best Education</span><span class="tl-tag">Meta Glasses Prize</span></div>
         </div>
       </div>
 
