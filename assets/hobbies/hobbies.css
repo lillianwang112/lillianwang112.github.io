@@ -1,0 +1,63 @@
+@font-face {
+  font-family: 'Great Vibes';
+  src: url('../fonts/great-vibes.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+.marquee-wrap { padding: 4px 0 40px; }
+.marquee-item {
+  font-family: 'Great Vibes', 'Times New Roman', cursive;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.55;
+  color: rgba(250,250,249,.72);
+}
+.marquee-item.hl { font-weight: 400; color: #fafaf9; }
+.pikachu-lane { position: absolute; left: 0; right: 0; bottom: 0; height: 45px; pointer-events: none; }
+.pikachu-runner {
+  position: absolute;
+  left: -64px;
+  bottom: 0;
+  width: 58px;
+  height: 45px;
+  object-fit: contain;
+  animation: pikachu-run 13s linear infinite;
+}
+@keyframes pikachu-run {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 128px)); }
+}
+.marquee-toggle {
+  position: absolute; right: 10px; bottom: 7px; z-index: 2;
+  color: rgba(250,250,249,.7); background: var(--ink);
+  border: 1px solid rgba(250,250,249,.25); border-radius: 3px;
+  padding: 3px 8px; font: .65rem 'Times New Roman', Times, serif;
+  cursor: pointer;
+}
+.marquee-toggle:focus-visible { outline: 2px solid #f5bb51; outline-offset: 3px; }
+.marquee-wrap.is-paused .marquee-track,
+.marquee-wrap.is-paused .pikachu-runner { animation-play-state: paused; }
+.marquee-wrap.is-paused .pikachu-runner { visibility: hidden; }
+.fun-pill { gap: 6px; }
+.fun-pill .fp-ico { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fp-ico img { display: block; width: 24px; height: 24px; object-fit: contain; }
+.fp-ico .hobby-bunting { width: 29px; height: 26px; object-fit: contain; }
+.fp-ico .hobby-ravenclaw { width: 25px; height: 28px; }
+.fp-ico .hobby-nbc { width: 29px; }
+.ravenclaw-crest { position: relative; z-index: 1; width: 76px; height: 76px; object-fit: contain; opacity: .6; transition: opacity .3s, transform .3s var(--spring); }
+.sb-ravenclaw:hover .ravenclaw-crest { opacity: 1; transform: scale(1.06); }
+.ravenclaw-name { font-family: var(--display); font-size: 1.5rem; font-weight: 700; color: var(--r); }
+@media (max-width: 640px) {
+  .marquee-item { font-size: 1.35rem; padding: 0 20px; }
+  .pikachu-runner { animation-duration: 8s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .pikachu-lane, .marquee-toggle { display: none; }
+  .marquee-wrap { padding-bottom: 4px; }
+}
+
+.foot-links { flex-wrap: wrap; }

@@ -1,0 +1,22 @@
+/* Additions to the original site. Its typography, layout and content are retained. */
+.valor-nav{width:25px;height:25px;flex-shrink:0;object-fit:contain}
+.valor-hero-mark{position:absolute;right:34px;top:105px;width:clamp(190px,24vw,340px);height:auto;opacity:.065;pointer-events:none;user-select:none;z-index:0}
+.hero-l>.valor-hero-mark~*{position:relative;z-index:1}
+.valor-stat{object-fit:contain;opacity:.7}
+.valor-research-mark{position:absolute;top:-8px;right:52px;width:96px;height:96px;opacity:.15;pointer-events:none;user-select:none}
+.valor-footer{display:inline-block;vertical-align:middle;margin-right:9px;object-fit:contain}
+.valor-replay{border:0;padding:0;background:none;color:var(--i3);font-family:var(--mono);font-size:.62rem;cursor:pointer}
+.valor-replay:hover{color:var(--r)}
+.valor-replay:focus-visible,.valor-skip:focus-visible{outline:2px solid var(--r3);outline-offset:5px}
+#valor-intro[hidden]{display:none!important}
+#valor-intro{position:fixed;inset:0;z-index:100000;pointer-events:none;isolation:isolate;overflow:hidden}
+.valor-curtain{position:absolute;inset:0;background:#100909;--opening:0px;mask-image:radial-gradient(circle at 50% 50%,transparent var(--opening),#000 calc(var(--opening) + 2px));-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent var(--opening),#000 calc(var(--opening) + 2px))}
+.valor-flight{position:absolute;inset:0;width:100%;height:100%}
+.valor-bird{display:block;width:100%;height:100%;overflow:visible}
+.valor-ring{opacity:0}
+.valor-signature{filter:drop-shadow(0 2px 3px #380e0d)}
+.valor-skip{position:absolute;right:28px;bottom:24px;border:1px solid #8c5f50;background:#180e0c;color:#f8e7d8;padding:10px 15px;border-radius:4px;font-family:var(--mono);font-size:11px;pointer-events:auto;cursor:pointer}
+.valor-skip span{padding-left:12px;color:#f9ab7d}
+@media(max-width:1100px){.valor-hero-mark{right:65px;top:100px;width:300px}}
+@media(max-width:768px){.valor-hero-mark{width:175px;right:20px;top:100px;opacity:.06}.valor-research-mark{width:60px;height:60px;right:20px;top:5px;opacity:.08}.valor-skip{right:20px;bottom:20px}}
+@media(prefers-reduced-motion:reduce){#valor-intro{display:none!important}}
